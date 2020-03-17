@@ -1,6 +1,20 @@
-{% extends "base.html"%}
+{% extends "base.html" %}
+
 {% block content %}
 
-<h1> Shopping App </h1>
+<div  class="container">
+    <img class="img" src="https://clipartart.com/images/shopping-bag-logo-clipart-1.jpg" alt="shopping-bag-logo-clipart-1" width = "100px">
+    <button href = "{{ url_for('high') }}" class="btn">High Tier</button>
+</div>
+  <div class="container">
+    <img class="img" src="https://clipartart.com/images/shopping-bag-logo-clipart-1.jpg" width = "100px">
+    <button  href = "{{ url_for('mid') }}" class="btn">Mid Tier</button>
+  </div>
+  <div class="container">
+    <img class="img" src="https://clipartart.com/images/shopping-bag-logo-clipart-1.jpg" width = "100px">
+    <button  href = "{{ url_for('low') }}"class="btn">Low Tier</button>
+  </div>
+  
+
 
 {% endblock %}
