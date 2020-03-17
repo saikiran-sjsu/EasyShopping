@@ -1,0 +1,159 @@
+#div1
+{
+  /* margin-top: 62px;
+  background-color: WHITE !important;
+  height: 505px;
+  width: 100%; */
+  margin-top: 250px;
+  font-size: x-large;
+
+}
+#div2
+{
+  text-align: justify;
+  width: 70%;
+  margin: auto;
+  border: solid #B0C4DE;
+  border-width: thin;
+  border-radius: 8px;
+  padding: 10px;
+  background-image: linear-gradient(-45deg, rgba(77, 151, 181, 0.8), rgba(130, 181, 201, 0.6), rgba(211, 211, 211, 0.4));
+}
+/* style*/
+.img {
+  height: 20px;
+  width: 20px;
+  src: url(../images/logo.png);
+}
+
+/* next & previous buttons */
+ .prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 17px;
+  color: white;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+  margin-top: -22px;
+}
+
+/* Position */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+
+}
+.prev{
+  left: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.6);
+}
+
+/*Nav bar for profile*/
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color:#f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+  right: 0;
+}
+
+.dropdown:hover {
+  background-color: rgba(52, 222, 235, 0.8);
+}
+
+#profile.dropdown-content
+{
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+} 
+.profile
+{
+  left: 0;
+}
+
+#profile.dropdown:hover
+{
+  display: block;
+}
+
+
+
+
+
+body {
+ 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
+
+.trans
+{
+  margin-top: 50px;
+}
+.container {
+    position: relative;
+    width: 50%;
+  }
+  
+  /* Make the image responsive */
+  .container img {
+    width: 50%;
+    height: auto;
+  }
+  
+  /* Style the button and place it in the middle of the container/image */
+  .container .btn {
+    position: absolute;
+    top: 100%;
+    left: 100%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: #555;
+    color: white;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .container .btn:hover {
+    background-color: black;
+  }
