@@ -1,17 +1,41 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+    <link rel ='stylesheet' href ="static/css/main.css" >
+    <link href="static/css/style.css" rel='stylesheet'>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 <head>
-<!--    <script src="https://kit.fontawesome.com/5a778ee770.js" crossorigin="anonymous"></script>-->
-<!--    <link href="static/css/style.css" rel='stylesheet'>-->
-<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
-<!--    <meta charset="utf-8">-->
+   <script src="https://kit.fontawesome.com/5a778ee770.js" crossorigin="anonymous"></script>
+
+
+   <meta charset="utf-8">
     {% if title %}
     <title>{{title}}</title>
     {% else %}
     <title>Home</title>
     {% endif %}
 </head>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark top">
+    <!-- <a class="navbar-brand" >Easy Shopping</a> -->
+   <img class= "img" alt = "logo" src="static/images/logo.png" >
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+    aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item"><a class="nav-link"  href = "{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a></li>
+        <li class="nav-item"><a class="nav-link"  href = "{{ url_for('high') }}" >Products</a></li>
+        <li class="nav-item"><a class="nav-link"  href = "{{ url_for('mid') }}">Cart</a></li>
+        <li class="nav-item"><a class="nav-link"  href = "{{ url_for('low') }}">Wishlist</a></li>
+      </ul>
+
+        </div>
+      </form>
+    </div>
+  </nav>
 
 <body>
 
