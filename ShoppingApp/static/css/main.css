@@ -21,9 +21,9 @@
 }
 /* style*/
 .img {
-  height: 20px;
-  width: 20px;
-  src: url(../images/logo.png);
+  height: 50px;
+  width: 50px;
+ 
 }
 
 /* next & previous buttons */
@@ -134,15 +134,15 @@ body {
   
   /* Make the image responsive */
   .container img {
-    width: 50%;
+    width: 25%;
     height: auto;
   }
   
   /* Style the button and place it in the middle of the container/image */
   .container .btn {
     position: absolute;
-    top: 100%;
-    left: 100%;
+    top: 50%;
+    left: 12%;
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     background-color: #555;
