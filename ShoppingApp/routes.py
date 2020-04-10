@@ -1,6 +1,7 @@
-from flask import app
 from flask import render_template
-from ShoppingApp import app
+from ShoppingApp import app, db
+from ShoppingApp.forms import RegisterForm
+from ShoppingApp.models import User, Items
 
 
 @app.route('/')
@@ -9,17 +10,35 @@ def home():
     title = 'Home'
     return render_template('home.html', title=title)
 
+
 @app.route('/product')
 def high():
     title = 'products'
     return render_template('product.html', title=title)
+
 
 @app.route('/cart')
 def mid():
     title = 'cart'
     return render_template('cart.html', title=title)    
 
+
 @app.route('/wishlist')
 def low():
     title = 'wishlist'
-    return render_template('wishlist.html', title=title)        
+    return render_template('wishlist.html', title=title)
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    title = 'Register'
+    form = RegisterForm()
+    if form.validate_on_submit():
+        users = User(userName=form.userName.data, firstName=form.firstName.data,
+                     lastName=form.lastName.data, email=form.email.data, CreditCard=form.CreditCard.data,
+                     ccv=form.ccv.data)
+        db.session.add(users)
+        db.session.commit()
+        print("Account Created!")
+
+    return render_template('register.html', title=title, form=form)
