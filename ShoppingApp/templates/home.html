@@ -2,17 +2,46 @@
 
 {% block content %}
 
-<div  class="container">
-    <img class="img" src="https://clipartart.com/images/shopping-bag-logo-clipart-1.jpg" alt="shopping-bag-logo-clipart-1" width = "100px">
-    <button href = "{{ url_for('high') }}" class="btn">High Tier</button>
+<div class="slides-container">
+  <center>
+  <img class= "homeSlides" src = "/static/images/sale.jpg" alt = "sale" style = "width: 100%">
+  <img class= "homeSlides" src = "/static/images/clothes.jpg" alt = "clothes" style ="width: 100%">
+
+  <a class="prev" onclick="slideShow(-1)">&#10094;</a>
+  <a class="next" onclick="slideShow(1)">&#10095;</a>
+  </center>
+  
+  <script>
+    var slideIndex = 1;
+    moveSlides(slideIndex);
+  
+    function slideShow(n) {
+      moveSlides(slideIndex += n);
+    }
+  
+    function currentSlide(n) {
+      moveSlides(slideIndex = n);
+    }
+  
+    function moveSlides(n) {
+      var slides = document.getElementsByClassName("homeSlides");
+      if (n > slides.length) {
+        slideIndex = 1
+      }
+      if (n < 1) {
+        slideIndex = slides.length
+      }
+      for (var i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      slides[slideIndex - 1].style.display = "block";
+    }
+    </script>
+  
 </div>
-  <div class="container">
-    <img class="img" src="https://clipartart.com/images/shopping-bag-logo-clipart-1.jpg" width = "100px">
-    <button  href = "{{ url_for('mid') }}" class="btn">Mid Tier</button>
-  </div>
-  <div class="container">
-    <img class="img" src="https://clipartart.com/images/shopping-bag-logo-clipart-1.jpg" width = "100px">
-    <button  href = "{{ url_for('low') }}"class="btn">Low Tier</button>
-  </div>
+
+
+
+
 
 {% endblock %}
