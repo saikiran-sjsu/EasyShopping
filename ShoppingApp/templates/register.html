@@ -4,7 +4,7 @@
 
 
 <h1>Register</h1>
-<form class="form-register" action="" , method="post">
+<form class="form-register" action=""  method="post">
   {{form.hidden_tag()}}
 
   <div class="">
@@ -12,6 +12,12 @@
   </div>
   <div class="">
     <input type="text" name="firstName" placeholder="First Name">
+  </div>
+    <div class="">
+    <input type="text" name="password" placeholder="Password">
+  </div>
+    <div class="">
+    <input type="text" name="secret_key" placeholder="Secret Key">
   </div>
 
   <div class="">
@@ -26,7 +32,7 @@
   <div class="">
     <input type="text" name="ccv" placeholder="CCV">
   </div>
-  {{form.submit(class="btn btn-lg btn-primary")}}
+  {{form.submit()}}
 
 </form>
 
