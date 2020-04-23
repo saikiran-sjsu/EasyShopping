@@ -113,11 +113,16 @@
 
 /* product view */
 .column {
-  float: left;
+  float: center;
   width: 50%;
   padding: 10px;
 }
 
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
 .checked {
   color: orange;
 }
@@ -202,12 +207,17 @@ body {
     background-color: black;
   }
 
+  .btn2 {
+    background-color: black;
+    color: black;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
   .btn {
-    position: absolute;
-    top: 50%;
-    left: 12%;
-    transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
     background-color: black;
     color: black;
     font-size: 16px;
