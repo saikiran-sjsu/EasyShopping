@@ -1,20 +1,20 @@
+from flask_login import UserMixin
+
 from ShoppingApp import db
 from werkzeug.security import generate_password_hash,check_password_hash
+from ShoppingApp import login
 
-
-class User(db.Model):
-
-    __UserTable__ = 'user'
+class User(UserMixin, db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     userName = db.Column(db.String(64), unique=True, nullable=False)
     firstName = db.Column(db.String(128))
     lastName = db.Column(db.String(128))
-    password = db.Column(db.String(128), nullable=False)
-    secret_key = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), index=True, unique=True)
     CreditCard = db.Column(db.String(128), unique=True)
     ccv = db.Column(db.String(128), unique=True)
+    password = db.Column(db.String(128), nullable=False)
+    hint = db.Column(db.String(128), nullable=False)
 
     def __repr__(self):
         return '<User:{}>'.format(self.userName)
@@ -23,23 +23,22 @@ class User(db.Model):
         self.password = generate_password_hash(password)
 
     def check_password(self, password):
-        self.password = check_password_hash(self.password, password)
+        return check_password_hash(self.password, password)
 
-    def set_secret_key(self, secret_key):
-        self.password = generate_password_hash(secret_key)
+    def set_hint(self, hint):
+        self.hint = generate_password_hash(hint)
 
-    def check_secret_key(self, secret_key):
-        self.password = check_password_hash(self.secret_key, secret_key)
+    def check_secret_key(self, hint):
+        return check_password_hash(self.hint, hint)
 
 
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(id))
 
-class Items(db.Model):
-    __UserTable__ = 'Items'
-    id = db.Column(db.Integer, primary_key=True)
 
 if __name__ == '__main__':
     db.create_all()
-
 
 
 

@@ -1,8 +1,8 @@
-from flask import render_template
+from flask import render_template, redirect, url_for, flash
 from ShoppingApp import app, db
 from ShoppingApp.forms import RegisterForm, LoginForm
-from ShoppingApp.models import User, Items
-from flask_login import login_user, logout_user
+from ShoppingApp.models import User
+from flask_login import login_user, logout_user, current_user
 
 @app.route('/')
 @app.route('/home')
@@ -12,19 +12,19 @@ def home():
 
 
 @app.route('/product')
-def high():
+def product():
     title = 'products'
     return render_template('product.html', title=title)
 
 
 @app.route('/cart')
-def mid():
+def cart():
     title = 'cart'
     return render_template('cart.html', title=title)    
 
 
 @app.route('/wishlist')
-def low():
+def wishlist():
     title = 'wishlist'
     return render_template('wishlist.html', title=title)
 
@@ -33,12 +33,29 @@ def low():
 def login():
     title = 'Login'
     form = LoginForm()
-    #if form.validate_on_submit():
 
-
+    print(current_user.is_authenticated)
+    if current_user.is_authenticated:
+        print(current_user.is_authenticated)
+        return redirect(url_for('product'))
+    if form.validate_on_submit():
+        user = User.query.filter_by(userName=form.userName.data).first()
+        if user is None or not user.check_password(form.password.data):
+            print("Wrong Password")
+            return redirect(url_for('login'))
+        login_user(user)
+        return redirect(url_for('product'))
 
     return render_template('login.html', title=title, form=form)
 
+@app.route('/logout')
+def logout():
+    user = current_user
+    user.authenticated = False
+    db.session.add(user)
+    db.session.commit()
+    logout_user()
+    return redirect(url_for('home'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -49,7 +66,7 @@ def register():
                      lastName=form.lastName.data, email=form.email.data, CreditCard=form.CreditCard.data,
                      ccv=form.ccv.data)
         users.set_password(form.password.data)
-        users.set_secret_key(form.secret_key.data)
+        users.set_hint(form.hint.data)
         db.session.add(users)
         db.session.commit()
         print("Account Created!")
