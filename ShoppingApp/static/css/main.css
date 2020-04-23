@@ -113,11 +113,16 @@
 
 /* product view */
 .column {
-  float: left;
+  float: center;
   width: 50%;
   padding: 10px;
 }
 
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
 .checked {
   color: orange;
 }
@@ -160,7 +165,7 @@
 
 
 body {
- 
+
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -175,13 +180,13 @@ body {
     position: relative;
     width: 50%;
   }
-  
+
   /* Make the image responsive */
   .container img {
     width: 25%;
     height: auto;
   }
-  
+
   /* Style the button and place it in the middle of the container/image */
   .container .btn {
     position: absolute;
@@ -197,17 +202,22 @@ body {
     cursor: pointer;
     border-radius: 5px;
   }
-  
+
   .container .btn:hover {
     background-color: black;
   }
 
+  .btn2 {
+    background-color: black;
+    color: black;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
   .btn {
-    position: absolute;
-    top: 50%;
-    left: 12%;
-    transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
     background-color: black;
     color: black;
     font-size: 16px;
