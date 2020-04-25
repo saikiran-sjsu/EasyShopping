@@ -10,43 +10,43 @@ def home():
     title = 'Home'
     return render_template('home.html', title=title)
 
-
-@app.route('/product', methods=['GET'])
+@app.route('/product', methods=['GET','POST'])
 def product():
     title = 'Products'
     items = Item.query.all()
     print(items)
+
+    if request.method == 'POST':
+        print("Its a POST request on product page")
+        newCartItem = CartItem(itemname=request.args.get('itemname'),
+                               itemprice=request.args.get('itemprice'),
+                               itemquantity=int(request.form['quantity']))
+        if newCartItem:
+            db.session.add(newCartItem)  # add new item to db
+            db.session.commit()  # commits all changes
+            return cart()
+
     return render_template('product.html', items=items, title=title)
 
 @app.route('/product/add', methods=['POST'])
 def productadd():
     itemname = request.args.get('itemname')
     itemprice = request.args.get('price')
-    print("Account t shirt!")
+
     if itemname and itemprice:
         new_item = Item(itemname=itemname, itemprice=itemprice)
         db.session.add(new_item)  # add new item to db
         db.session.commit()  # commits all changes
-        print("Shirt shirt")
 
 @app.route('/cart', methods=['GET'])
 def cart():
     title = 'Cart'
     cartitems = CartItem.query.all()
-    cartadd()
-    return render_template('cart.html', cartitems=cartitems, title=title)
+    totalprice = 0.0
+    for item in cartitems:
+        totalprice += item.itemprice
 
-@app.route('/cart/add', methods=['POST'])
-def cartadd():
-    itemname = request.args.get('itemname')
-    itemquantity = request.args.get('itemquantity')
-    itemprice = request.args.get('price')
-    print("item in cart")
-    if itemname and itemquantity and itemprice:
-        new_item = CartItem(itemname=itemname, itemquantity=itemquantity, itemprice=itemprice)
-        db.session.add(new_item)  # add new item to db
-        db.session.commit()  # commits all changes
-        print("inside cart if")
+    return render_template('cart.html', cartitems=cartitems, title=title, totalprice=totalprice)
 
 @app.route('/wishlist')
 def wishlist():
@@ -95,6 +95,5 @@ def register():
         db.session.add(users)
         db.session.commit()
         print("Account Created!")
-
 
     return render_template('register.html', title=title, form=form)

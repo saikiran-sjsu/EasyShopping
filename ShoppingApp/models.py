@@ -51,7 +51,6 @@ class CartItem(db.Model):
 def load_user(id):
     return User.query.get(int(id))
 
-
 if __name__ == '__main__':
     db.create_all()
 
