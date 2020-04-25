@@ -1,9 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Products</h1>
+<h1>{{title}}</h1>
 <a>{{current_user.firstName}}'s Home Page</a>
 
+{% for item in items %}
+<ul>
+    <li>
+        <span class="field-name">Item:</span>
+        <span class="field-value">{{ item.itemname }}</span>
+    </li>
+    <li>
+        <span class="field-name">Price $</span>
+        <span class="field-value">{{ item.itemprice }}</span>
+    </li>
+</ul>
+{% endfor %}
 
 <div class="column" >
     <img src = /static/images/polo.jpg width =100px>
@@ -28,6 +40,5 @@
     <p>Price: $1000</p>
     <button> Add to Cart </button>
   </div>
-
 
 {% endblock content %}
