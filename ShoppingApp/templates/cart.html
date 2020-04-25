@@ -3,21 +3,33 @@
 {% block content %}
 <h1>{{title}}</h1>
 
-<div class = "row">
-<div class="column" >
-    <img src = /static/images/polo.jpg width =100px>
-    <h2>Polo Shirt</h2>
-    <p> Rating: 5/10</p>
-    <p> Price: $100</p>
-  </div>
-  <p></p>
+{% for item in cartitems %}
+<ul>
+    <div class="row">
+        <form action="" method="POST">
+            <img src=/static/images/polo.jpg width=100px>
+            <h2>{{item.itemname}}</h2>
+            <p>Quantity: x{{item.itemquantity}}</p>
+            <p>Price: ${{item.itemprice}}</p>
+        </form>
+    </div>
+</ul>
+{% endfor %}
+
+<div class="row">
+    <div class="column">
+        <img src=/static/images/polo.jpg width=100px>
+        <h2>Polo Shirt</h2>
+        <p> Rating: 5/10</p>
+        <p> Price: $100</p>
+    </div>
+    <p></p>
 
 
-    <div class = "column">
-    <h2>Items</h2>
-    <p> Price: $100</p>
-    <p> Total: $100</p>
-    <button class = "btn" style = "background-color: darkgray;">Submit Order</button>
+    <div class="column">
+        <h2>Items</h2>
+        <p> Total: ${{totalprice}}</p>
+        <button class="btn" style="background-color: darkgray;">Submit Order</button>
     </div>
 </div>
 {% endblock content %}

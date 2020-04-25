@@ -2,21 +2,32 @@
 
 {% block content %}
 <h1>{{title}}</h1>
-<a>{{current_user.firstName}}'s Home Page</a>
 
 {% for item in items %}
 <ul>
-    <li>
-        <span class="field-name">Item:</span>
-        <span class="field-value">{{ item.itemname }}</span>
-    </li>
-    <li>
-        <span class="field-name">Price $</span>
-        <span class="field-value">{{ item.itemprice }}</span>
-    </li>
+    <div class="column">
+        <form action="?itemname={{item.itemname}}&itemprice={{item.itemprice}}"
+              method="POST"
+        >
+            <img src=/static/images/polo.jpg width=100px>
+            <h2>{{item.itemname}}</h2>
+            <p>Rating: 5/10</p>
+            <p>Price: ${{item.itemprice}}</p>
+            <div>
+                <input type="text" name="quantity" value=1>
+            </div>
+            <button
+                type="submit"
+                name="addtocart"
+            >
+                Add to Cart
+            </button>
+        </form>
+    </div>
 </ul>
 {% endfor %}
 
+<h2>Hardcoded Section:</h2>
 <div class="column" >
     <img src = /static/images/polo.jpg width =100px>
     <h2>Polo Shirt</h2>
