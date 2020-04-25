@@ -31,6 +31,21 @@ class User(UserMixin, db.Model):
     def check_secret_key(self, hint):
         return check_password_hash(self.hint, hint)
 
+class Item(db.Model):
+    """Data model for items."""
+
+    __tablename__ = 'table_of_items'
+    id = db.Column(db.Integer, primary_key=True)
+    itemname = db.Column(db.String(64), unique=True, nullable=False)
+    itemprice = db.Column(db.Float)
+
+class CartItem(db.Model):
+
+    __tablename__ = 'cart_table'
+    id = db.Column(db.Integer, primary_key=True)
+    itemname = db.Column(db.String(64), unique=True, nullable=False)
+    itemquantity = db.Column(db.Integer)
+    itemprice = db.Column(db.Float)
 
 @login.user_loader
 def load_user(id):

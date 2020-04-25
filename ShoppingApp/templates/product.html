@@ -1,33 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Products</h1>
+<h1>{{title}}</h1>
 <a>{{current_user.firstName}}'s Home Page</a>
 
 
-<div class="column" >
-    <img src = /static/images/polo.jpg width =100px>
-    <h2>Polo Shirt</h2>
-    <p>Rating: 5/10</p>
-    <p>Price: $100</p>
-    <button> Add to Cart </button>
-  </div>
-  <p></p>
-  <div class="column">
-    <img src = /static/images/tshirt.jpg width =100px>
-    <h2>T-Shirt</h2>
-    <p>Rating: 10/10</p>
-    <p>Price: $10</p>
-    <button> Add to Cart </button>
-  </div>
-  <p></p>
-  <div class="column" >
-    <img src = /static/images/clapped.jpg width =100px>
-    <h2>Clapped Ass Shirt</h2>
-    <p>Rating: 1/10</p>
-    <p>Price: $1000</p>
-    <button> Add to Cart </button>
-  </div>
+{% for item in items %}
+<ul>
+    <li>
+        <span class="field-name">Item:</span>
+        <span class="field-value">{{ item.itemname }}</span>
+    </li>
+    <li>
+        <span class="field-name">Price $</span>
+        <span class="field-value">{{ item.itemprice }}</span>
+    </li>
+</ul>
+{% endfor %}
 
 
 {% endblock content %}

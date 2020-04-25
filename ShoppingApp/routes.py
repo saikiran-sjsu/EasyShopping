@@ -1,7 +1,7 @@
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, request
 from ShoppingApp import app, db
 from ShoppingApp.forms import RegisterForm, LoginForm
-from ShoppingApp.models import User
+from ShoppingApp.models import User, Item, CartItem
 from flask_login import login_user, logout_user, current_user
 
 @app.route('/')
@@ -11,17 +11,42 @@ def home():
     return render_template('home.html', title=title)
 
 
-@app.route('/product')
+@app.route('/product', methods=['GET'])
 def product():
-    title = 'products'
-    return render_template('product.html', title=title)
+    title = 'Products'
+    items = Item.query.all()
+    print(items)
+    return render_template('product.html', items=items, title=title)
 
+@app.route('/product/add', methods=['POST'])
+def productadd():
+    itemname = request.args.get('itemname')
+    itemprice = request.args.get('price')
+    print("Account t shirt!")
+    if itemname and itemprice:
+        new_item = Item(itemname=itemname, itemprice=itemprice)
+        db.session.add(new_item)  # add new item to db
+        db.session.commit()  # commits all changes
+        print("Shirt shirt")
 
-@app.route('/cart')
+@app.route('/cart', methods=['GET'])
 def cart():
-    title = 'cart'
-    return render_template('cart.html', title=title)    
+    title = 'Cart'
+    cartitems = CartItem.query.all()
+    cartadd()
+    return render_template('cart.html', cartitems=cartitems, title=title)
 
+@app.route('/cart/add', methods=['POST'])
+def cartadd():
+    itemname = request.args.get('itemname')
+    itemquantity = request.args.get('itemquantity')
+    itemprice = request.args.get('price')
+    print("item in cart")
+    if itemname and itemquantity and itemprice:
+        new_item = CartItem(itemname=itemname, itemquantity=itemquantity, itemprice=itemprice)
+        db.session.add(new_item)  # add new item to db
+        db.session.commit()  # commits all changes
+        print("inside cart if")
 
 @app.route('/wishlist')
 def wishlist():
