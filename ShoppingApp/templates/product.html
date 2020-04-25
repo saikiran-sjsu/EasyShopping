@@ -4,7 +4,6 @@
 <h1>{{title}}</h1>
 <a>{{current_user.firstName}}'s Home Page</a>
 
-
 {% for item in items %}
 <ul>
     <li>
@@ -18,5 +17,28 @@
 </ul>
 {% endfor %}
 
+<div class="column" >
+    <img src = /static/images/polo.jpg width =100px>
+    <h2>Polo Shirt</h2>
+    <p>Rating: 5/10</p>
+    <p>Price: $100</p>
+    <button> Add to Cart </button>
+  </div>
+  <p></p>
+  <div class="column">
+    <img src = /static/images/tshirt.jpg width =100px>
+    <h2>T-Shirt</h2>
+    <p>Rating: 10/10</p>
+    <p>Price: $10</p>
+    <button> Add to Cart </button>
+  </div>
+  <p></p>
+  <div class="column">
+    <img src = /static/images/clapped.jpg width =100px>
+    <h2>Used Shirt</h2>
+    <p>Rating: 1/10</p>
+    <p>Price: $1000</p>
+    <button> Add to Cart </button>
+  </div>
 
 {% endblock content %}
