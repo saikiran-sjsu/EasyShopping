@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request
 from ShoppingApp import app, db
 from ShoppingApp.forms import RegisterForm, LoginForm
-from ShoppingApp.models import User, Item, CartItem
+from ShoppingApp.models import User, Item, CartItem, WishListItem
 from flask_login import login_user, logout_user, current_user
 
 @app.route('/')
@@ -17,26 +17,25 @@ def product():
     print(items)
 
     if request.method == 'POST':
-        print("Its a POST request on product page")
-        newCartItem = CartItem(itemname=request.args.get('itemname'),
-                               itemprice=request.args.get('itemprice'),
-                               itemquantity=int(request.form['quantity']))
-        if newCartItem:
-            db.session.add(newCartItem)  # add new item to db
-            db.session.commit()  # commits all changes
-            return cart()
+        print(request.form.get('addtocart'))
+        if request.form.get('addtocart'):
+            print("Its a POST request on product page")
+            newCartItem = CartItem(itemname=request.args.get('itemname'),
+                                   itemprice=request.args.get('itemprice'),
+                                   itemquantity=int(request.form['quantity']))
+            if newCartItem:
+                db.session.add(newCartItem)  # add new item to db
+                db.session.commit()  # commits all changes
+                return cart()
+        elif request.form.get('addtowishlist'):
+
+            newWSItem = WishListItem(itemname=request.args.get('itemname'),
+                                   itemprice=request.args.get('itemprice'))
+            if newWSItem:
+                db.session.add(newWSItem)
+                db.session.commit()
 
     return render_template('product.html', items=items, title=title)
-
-@app.route('/product/add', methods=['POST'])
-def productadd():
-    itemname = request.args.get('itemname')
-    itemprice = request.args.get('price')
-
-    if itemname and itemprice:
-        new_item = Item(itemname=itemname, itemprice=itemprice)
-        db.session.add(new_item)  # add new item to db
-        db.session.commit()  # commits all changes
 
 @app.route('/cart', methods=['GET'])
 def cart():
@@ -48,10 +47,23 @@ def cart():
 
     return render_template('cart.html', cartitems=cartitems, title=title, totalprice=totalprice)
 
-@app.route('/wishlist')
+@app.route('/wishlist', methods=['GET','POST'])
 def wishlist():
     title = 'wishlist'
-    return render_template('wishlist.html', title=title)
+    wishlistitems = WishListItem.query.all()
+    print(wishlistitems)
+
+    if request.method == 'POST':
+        print("It's a POST request on wishlist page")
+        newCartItemFromWL = CartItem(itemname=request.args.get('itemname'),
+                                     itemprice=request.args.get('itemprice'),
+                                     itemquantity=int(request.form['quantity']))
+        if newCartItemFromWL:
+            db.session.add(newCartItemFromWL)
+            db.session.commit()
+            print("WL item added committed")
+
+    return render_template('wishlist.html', items=wishlistitems, title=title)
 
 
 @app.route('/login', methods=['GET', 'POST'])

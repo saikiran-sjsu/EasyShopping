@@ -1,5 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>wishlist</h1>
+<h1>{{title}}</h1>
+
+{% for item in items %}
+<ui>
+    <div class="column">
+        <form action="?itemname={{item.itemname}}&itemprice={{item.itemprice}}"
+              method="POST">
+
+            <img src=/static/images/polo.jpg width=100px>
+            <h2>{{item.itemname}}</h2>
+            <p>Rating: 5/10</p>
+            <p>Price: ${{item.itemprice}}</p>
+            <div>
+                <input type="text" name="quantity" value=1>
+            </div>
+            <button type="submit"
+                    name="addtocart">
+                Add to Cart
+            </button>
+        </form>
+    </div>
+</ui>
+{% endfor %}
+
 {% endblock content %}
