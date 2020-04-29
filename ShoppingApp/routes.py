@@ -23,15 +23,28 @@ def product():
             newCartItem = CartItem(itemname=request.args.get('itemname'),
                                    itemprice=request.args.get('itemprice'),
                                    itemquantity=int(request.form['quantity']))
-            if newCartItem:
+
+            foundItemName = db.session.query(CartItem).filter_by(itemname=newCartItem.itemname).first().itemname
+            foundItemQuant = db.session.query(CartItem).filter_by(itemname=newCartItem.itemname).first().itemquantity
+            foundItemQuant += 1
+            # dif if you filter instead of filter_by
+            if not foundItemQuant:
                 db.session.add(newCartItem)  # add new item to db
                 db.session.commit()  # commits all changes
                 return cart()
-        elif request.form.get('addtowishlist'):
+            else:
+                print("Item already exists need quantity update")
+                db.session.query(CartItem).filter(CartItem.itemname == foundItemName).update({'itemquantity': foundItemQuant})
+                db.session.commit()
+                return cart()
 
+        elif request.form.get('addtowishlist'):
             newWSItem = WishListItem(itemname=request.args.get('itemname'),
                                    itemprice=request.args.get('itemprice'))
-            if newWSItem:
+
+            foundItemWS = db.session.query(WishListItem).filter_by(itemname=newWSItem.itemname).first()
+
+            if not foundItemWS:
                 db.session.add(newWSItem)
                 db.session.commit()
 
