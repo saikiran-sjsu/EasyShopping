@@ -32,7 +32,6 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.hint, hint)
 
 class Item(db.Model):
-    """Data model for items."""
 
     __tablename__ = 'table_of_items'
     id = db.Column(db.Integer, primary_key=True)
@@ -45,6 +44,13 @@ class CartItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     itemname = db.Column(db.String(64), unique=True, nullable=False)
     itemquantity = db.Column(db.Integer)
+    itemprice = db.Column(db.Float)
+
+class WishListItem(db.Model):
+
+    __tablename__ = 'wishlist_table'
+    id = db.Column(db.Integer, primary_key=True)
+    itemname = db.Column(db.String(64), unique=True, nullable=False)
     itemprice = db.Column(db.Float)
 
 @login.user_loader
