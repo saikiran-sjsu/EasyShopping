@@ -75,7 +75,7 @@ def cart():
     cartitems = CartItem.query.all()
     totalprice = 0.00
     for item in cartitems:
-        totalprice += item.itemprice
+        totalprice += (item.itemprice*item.itemquantity)
 
     return render_template('cart.html', cartitems=cartitems, title=title, totalprice=totalprice)
 
