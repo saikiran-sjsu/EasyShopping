@@ -24,18 +24,25 @@ def product():
                                    itemprice=request.args.get('itemprice'),
                                    itemquantity=int(request.form['quantity']))
 
-            foundItemName = db.session.query(CartItem).filter_by(itemname=newCartItem.itemname).first().itemname
-            foundItemQuant = db.session.query(CartItem).filter_by(itemname=newCartItem.itemname).first().itemquantity
-            foundItemQuant += 1
-            # dif if you filter instead of filter_by
-            if not foundItemQuant:
+            foundItem = db.session.query(CartItem).first()
+            print(foundItem)
+            if foundItem:
+                foundItemName = db.session.query(CartItem).filter_by(itemname=newCartItem.itemname).first().itemname
+                foundItemQuant = db.session.query(CartItem).filter_by(itemname=newCartItem.itemname).first().itemquantity
+                foundItemQuant += 1
+                # dif if you filter instead of filter_by
+                if not foundItemQuant: #item doesn't exist in cart yet
+                    db.session.add(newCartItem)  # add new item to db
+                    db.session.commit()  # commits all changes
+                    return cart()
+                else:
+                    print("Item already exists need quantity update")
+                    db.session.query(CartItem).filter(CartItem.itemname == foundItemName).update({'itemquantity': foundItemQuant})
+                    db.session.commit()
+                    return cart()
+            else: #cart empty, add item
                 db.session.add(newCartItem)  # add new item to db
                 db.session.commit()  # commits all changes
-                return cart()
-            else:
-                print("Item already exists need quantity update")
-                db.session.query(CartItem).filter(CartItem.itemname == foundItemName).update({'itemquantity': foundItemQuant})
-                db.session.commit()
                 return cart()
 
         elif request.form.get('addtowishlist'):
@@ -48,13 +55,25 @@ def product():
                 db.session.add(newWSItem)
                 db.session.commit()
 
+        elif request.form.get('sorthighlow'):
+            itemshighlow = db.session.query(Item).order_by(Item.itemprice.desc())
+            return render_template('product.html', items=itemshighlow, title=title)
+
+        elif request.form.get('sortlowhigh'):
+            itemslowhigh = db.session.query(Item).order_by(Item.itemprice)
+            return render_template('product.html', items=itemslowhigh, title=title)
+
+        elif request.form.get('sortbyname'):
+            itemsbyname = db.session.query(Item).order_by(Item.itemname)
+            return render_template('product.html', items=itemsbyname, title=title)
+
     return render_template('product.html', items=items, title=title)
 
 @app.route('/cart', methods=['GET'])
 def cart():
     title = 'Cart'
     cartitems = CartItem.query.all()
-    totalprice = 0.0
+    totalprice = 0.00
     for item in cartitems:
         totalprice += item.itemprice
 

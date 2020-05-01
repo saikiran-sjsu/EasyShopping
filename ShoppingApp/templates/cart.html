@@ -10,7 +10,7 @@
             <img src=/static/images/polo.jpg width=100px>
             <h2>{{item.itemname}}</h2>
             <p>Quantity: x{{item.itemquantity}}</p>
-            <p>Price: ${{item.itemprice}}</p>
+            <p>Price: ${{'%0.2f'|format(item.itemprice|float)}}</p>
         </form>
     </div>
 </ul>
@@ -28,7 +28,7 @@
 
     <div class="column">
         <h2>Items</h2>
-        <p> Total: ${{totalprice}}</p>
+        <p> Total: ${{'%0.2f'|format(totalprice|float)}}</p>
         <button class="btn" style="background-color: darkgray;">Submit Order</button>
     </div>
 </div>
