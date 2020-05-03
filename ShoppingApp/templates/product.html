@@ -25,21 +25,30 @@
 
 {% for item in items %}
 <ul>
-    <div class="column">
+        
+    <!-- <div class="column"> -->
         <form action="?itemname={{item.itemname}}&itemprice={{item.itemprice}}"
               method="POST"
         >
-            <img src=/static/images/polo.jpg width=100px>
-            <h2>{{item.itemname}}</h2>
-            <p>Rating: 5/10</p>
-            <p>Price: ${{'%0.2f'|format(item.itemprice|float)}}</p>
-            <div>
-                <input type="text" name="quantity" value=1>
-            </div>
+        <table>
+            <tr>
+            <td> <img src=/static/images/polo.jpg width=100px></td>
+            <td>{{item.itemname}}</td>
+        </tr>
+        <tr>
+            <td>${{'%0.2f'|format(item.itemprice|float)}}</td>
+        </tr>
+        </table>
+    
+            <!-- <div> -->
+                <input type="text" name="quantity" placeholder="Quantity">
+            <!-- </div> -->
             <button
                 type="submit"
                 name="addtocart"
                 value=2
+                class = "btn"
+                style = "background-color: gray;"
             >
                 Add to Cart
             </button>
@@ -47,15 +56,19 @@
                 type="submit"
                 name="addtowishlist"
                 value=1
+                class = "btn"
+                style = "background-color: gray;"
             >
                 Add to Wish List
             </button>
+        
         </form>
-    </div>
+    <!-- </div> -->
+
 </ul>
 {% endfor %}
 
-<h2>Hardcoded Section:</h2>
+<!-- <h2>Hardcoded Section:</h2>
 <div class="column" >
     <img src = /static/images/polo.jpg width =100px>
     <h2>Polo Shirt</h2>
@@ -78,6 +91,6 @@
     <p>Rating: 1/10</p>
     <p>Price: $1000</p>
     <button> Add to Cart </button>
-  </div>
+  </div> -->
 
 {% endblock content %}
