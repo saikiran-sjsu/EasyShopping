@@ -23,23 +23,26 @@ def product():
             newCartItem = CartItem(itemname=request.args.get('itemname'),
                                    itemprice=request.args.get('itemprice'),
                                    itemquantity=int(request.form['quantity']))
+            quantityToAdd = int(request.form['quantity'])
+            print(quantityToAdd)
+            cartHasItem = db.session.query(CartItem).first() #Check to see if cart is empty
+            if cartHasItem:
+                itemFound = db.session.query(CartItem).filter_by(itemname=newCartItem.itemname).first()
+                if itemFound:
+                    foundItemName = db.session.query(CartItem).filter_by(itemname=newCartItem.itemname).first().itemname
+                    foundItemQuant = db.session.query(CartItem).filter_by(itemname=newCartItem.itemname).first().itemquantity
+                    foundItemQuant += quantityToAdd
+                    print("Item already exists need quantity update")
+                    db.session.query(CartItem).filter(CartItem.itemname == foundItemName).update( #item exists in table already, update quantity
+                        {'itemquantity': foundItemQuant})
+                    db.session.commit()
+                    return cart()
 
-            foundItem = db.session.query(CartItem).first()
-            print(foundItem)
-            if foundItem:
-                foundItemName = db.session.query(CartItem).filter_by(itemname=newCartItem.itemname).first().itemname
-                foundItemQuant = db.session.query(CartItem).filter_by(itemname=newCartItem.itemname).first().itemquantity
-                foundItemQuant += 1
-                # dif if you filter instead of filter_by
-                if not foundItemQuant: #item doesn't exist in cart yet
+                else: #item doesn't exist in cart yet
                     db.session.add(newCartItem)  # add new item to db
                     db.session.commit()  # commits all changes
                     return cart()
-                else:
-                    print("Item already exists need quantity update")
-                    db.session.query(CartItem).filter(CartItem.itemname == foundItemName).update({'itemquantity': foundItemQuant})
-                    db.session.commit()
-                    return cart()
+
             else: #cart empty, add item
                 db.session.add(newCartItem)  # add new item to db
                 db.session.commit()  # commits all changes
@@ -90,10 +93,33 @@ def wishlist():
         newCartItemFromWL = CartItem(itemname=request.args.get('itemname'),
                                      itemprice=request.args.get('itemprice'),
                                      itemquantity=int(request.form['quantity']))
-        if newCartItemFromWL:
-            db.session.add(newCartItemFromWL)
-            db.session.commit()
-            print("WL item added committed")
+        quantityToAdd = int(request.form['quantity'])
+        print("quantity from wish list")
+        print(quantityToAdd)
+        cartHasItem = db.session.query(CartItem).first()  # Check to see if cart is empty
+        if cartHasItem:
+            itemFound = db.session.query(CartItem).filter_by(itemname=newCartItemFromWL.itemname).first()
+            if itemFound:
+                foundItemName = db.session.query(CartItem).filter_by(itemname=newCartItemFromWL.itemname).first().itemname
+                foundItemQuant = db.session.query(CartItem).filter_by(
+                    itemname=newCartItemFromWL.itemname).first().itemquantity
+                foundItemQuant += quantityToAdd
+                print("Item already exists need quantity update")
+                db.session.query(CartItem).filter(CartItem.itemname == foundItemName).update(
+                    # item exists in table already, update quantity
+                    {'itemquantity': foundItemQuant})
+                db.session.commit()
+                return cart()
+
+            else:  # item doesn't exist in cart yet
+                db.session.add(newCartItemFromWL)  # add new item to db
+                db.session.commit()  # commits all changes
+                return cart()
+
+        else:  # cart empty, add item
+            db.session.add(newCartItemFromWL)  # add new item to db
+            db.session.commit()  # commits all changes
+            return cart()
 
     return render_template('wishlist.html', items=wishlistitems, title=title)
 
