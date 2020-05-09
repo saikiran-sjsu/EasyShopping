@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class="mx-auto2">
+
+    <div class="text-center">
+        <form class="form-signin" action="" method="post">
+            {{form.hidden_tag()}}
+            <h1 class="h3 mb-3 font-weight-normal">Reset Password</h1>
+
+            {{form.userName.label(class="sr-only")}}
+            {{form.userName(size= 24, placeholder="Enter username", class="form-control")}}
+            <br>
+
+            {{form.reset_password.label(class="sr-only")}}
+            {{form.reset_password(size= 24, placeholder="Enter Password", class="form-control")}}
+            <br>
+            {{form.reset(class="btn btn-lg btn-primary")}}
+        </form>
+    </div>
+</div>
+
+{% endblock %}

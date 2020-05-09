@@ -6,9 +6,7 @@
 {% for item in items %}
 <ul>
     <div class="column">
-        <form action="?itemname={{item.itemname}}&itemprice={{item.itemprice}}"
-              method="POST"
-        >
+        <form action="?itemname={{item.itemname}}&itemprice={{item.itemprice}}" method="POST">
             <img src=/static/images/polo.jpg width=100px>
             <h2>{{item.itemname}}</h2>
             <p>Rating: 5/10</p>
