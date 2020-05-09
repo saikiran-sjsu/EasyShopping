@@ -10,7 +10,15 @@
               method="POST">
             <img src=/static/images/polo.jpg width=100px>
             <h2>{{item.itemname}}</h2>
-            <p>Quantity: x{{item.itemquantity}}</p>
+            <label>Quantity: <input type="text" name="quantity" placeholder="Quantity" value={{item.itemquantity}}></label>
+            <button type="submit"
+                    name="updatequantity"
+                    value=1
+                    class="btn"
+                    style="background-color: gray;"
+                    >
+                Update
+            </button>
             <p>Price: ${{'%0.2f'|format(item.itemprice|float)}}</p>
             <button
                     type="submit"
