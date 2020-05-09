@@ -6,11 +6,21 @@
 {% for item in cartitems %}
 <ul>
     <div class="row">
-        <form action="" method="POST">
+        <form action="?itemname={{item.itemname}}&itemprice={{item.itemprice}}" 
+              method="POST">
             <img src=/static/images/polo.jpg width=100px>
             <h2>{{item.itemname}}</h2>
             <p>Quantity: x{{item.itemquantity}}</p>
             <p>Price: ${{'%0.2f'|format(item.itemprice|float)}}</p>
+            <button
+                    type="submit"
+                    name="removefromcart"
+                    value="1"
+                    class="btn"
+                    style = "background-color: gray;"
+                    >
+                Remove
+            </button>
         </form>
     </div>
 </ul>
