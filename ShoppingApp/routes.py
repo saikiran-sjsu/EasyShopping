@@ -36,17 +36,17 @@ def product():
                     db.session.query(CartItem).filter(CartItem.itemname == foundItemName).update( #item exists in table already, update quantity
                         {'itemquantity': foundItemQuant})
                     db.session.commit()
-                    return cart()
+                    return redirect(url_for('cart'))
 
                 else: #item doesn't exist in cart yet
                     db.session.add(newCartItem)  # add new item to db
                     db.session.commit()  # commits all changes
-                    return cart()
+                    return redirect(url_for('cart'))
 
             else: #cart empty, add item
                 db.session.add(newCartItem)  # add new item to db
                 db.session.commit()  # commits all changes
-                return cart()
+                return redirect(url_for('cart'))
 
         elif request.form.get('addtowishlist'):
             newWSItem = WishListItem(itemname=request.args.get('itemname'),
@@ -72,13 +72,23 @@ def product():
 
     return render_template('product.html', items=items, title=title)
 
-@app.route('/cart', methods=['GET'])
+@app.route('/cart', methods=['GET','POST'])
 def cart():
     title = 'Cart'
     cartitems = CartItem.query.all()
     totalprice = 0.00
     for item in cartitems:
         totalprice += (item.itemprice*item.itemquantity)
+
+    if request.method == 'POST':
+        if request.form.get('removefromcart'):
+            print("trying to delete")
+            itemToRemove = request.args.get('itemname')
+            """db.session.query(CartItem).filter(itemname=itemToRemove).delete()"""
+            db.session.query(CartItem).filter(CartItem.itemname == itemToRemove).delete()
+            db.session.commit()
+            return redirect(url_for('cart'))
+            
 
     return render_template('cart.html', cartitems=cartitems, title=title, totalprice=totalprice)
 
