@@ -20,6 +20,11 @@
                 value=1>
             Sort: alphabetically
         </button>
+        <button type="submit"
+                name="sortbycategories"
+                value=1>
+            Sort: Category
+        </button>
     </form>
 </div>
 
@@ -27,42 +32,42 @@
 <ul>
         
     <!-- <div class="column"> -->
-        <form action="?itemname={{item.itemname}}&itemprice={{item.itemprice}}"
-              method="POST"
-        >
+    <form action="?itemname={{item.itemname}}&itemprice={{item.itemprice}}&category={{item.category}}&itemimage={{item.image}}"
+          method="POST">
         <table>
             <tr>
-            <td> <img src=/static/images/polo.jpg width=100px></td>
-            <td>{{item.itemname}}</td>
+                <td><img src={{item.image}} width=100px></td>
+            </tr>
+            <tr>
+                <td>{{item.itemname}}</td>
             </tr>
             <tr>
                 <td>${{'%0.2f'|format(item.itemprice|float)}}</td>
             </tr>
+            <tr>
+                <td><label>Size: S/M/L</label><input type="text" name="itemsize" placeholder="Size" value="M" maxlength="1" style="text-transform:uppercase"></td>
+            </tr>
         </table>
-    
-            <!-- <div> -->
-                <input type="text" name="quantity" placeholder="Quantity" value=1>
-            <!-- </div> -->
-            <button
-                type="submit"
+
+        <!-- <div> -->
+        <label>Quantity: <input type="number" name="quantity" placeholder="Quantity" value=1 min="1"></label>
+        <!-- </div> -->
+        <button type="submit"
                 name="addtocart"
                 value=2
-                class = "btn"
-                style = "background-color: gray;"
-            >
-                Add to Cart
-            </button>
-            <button
-                type="submit"
+                class="btn"
+                style="background-color: gray;">
+            Add to Cart
+        </button>
+        <button type="submit"
                 name="addtowishlist"
                 value=1
-                class = "btn"
-                style = "background-color: gray;"
-            >
-                Add to Wish List
-            </button>
-        
-        </form>
+                class="btn"
+                style="background-color: gray;">
+            Add to Wish List
+        </button>
+
+    </form>
     <!-- </div> -->
 
 </ul>

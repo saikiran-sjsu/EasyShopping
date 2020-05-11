@@ -6,15 +6,15 @@
 {% for item in items %}
 <ui>
     <div class="column">
-        <form action="?itemname={{item.itemname}}&itemprice={{item.itemprice}}"
+        <form action="?itemname={{item.itemname}}&itemprice={{item.itemprice}}&itemimage={{item.image}}&itemsize={{item.itemsize}}"
               method="POST">
 
-            <img src=/static/images/polo.jpg width=100px>
+            <img src={{item.image}} width=100px>
             <h2>{{item.itemname}}</h2>
-            <p>Rating: 5/10</p>
+            <p>Size: {{item.itemsize}}</p>
             <p>Price: ${{item.itemprice}}</p>
             <div>
-                <input type="text" name="quantity" value=1>
+                <label>Quantity: </label><input type="number" name="quantity" value=1 min="1"></label>
             </div>
             <button type="submit"
                     name="addtocart"
