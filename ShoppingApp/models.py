@@ -16,20 +16,20 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(128), nullable=False)
     hint = db.Column(db.String(128), nullable=False)
 
-    def __repr__(self):
-        return '<User:{}>'.format(self.userName)
-
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
-    def set_hint(self, hint):
-        self.hint = generate_password_hash(hint)
+    def set_hint(self, password):
+        self.hint = generate_password_hash(password)
 
-    def check_secret_key(self, hint):
-        return check_password_hash(self.hint, hint)
+    def check_secret_key(self, password):
+        return check_password_hash(self.hint, password)
+
+    def __repr__(self):
+        return '<User:{}>'.format(self.userName)
 
 class Item(db.Model):
 

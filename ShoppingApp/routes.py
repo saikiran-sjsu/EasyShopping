@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, flash, request
 from ShoppingApp import app, db
-from ShoppingApp.forms import RegisterForm, LoginForm
+from ShoppingApp.forms import RegisterForm, LoginForm, ForgotForm
 from ShoppingApp.models import User, Item, CartItem, WishListItem
 from flask_login import login_user, logout_user, current_user
 
@@ -125,6 +125,43 @@ def cart():
             return redirect(url_for('cart'))
 
     return render_template('cart.html', cartitems=cartitems, title=title, subtotal=totalsubprice, tax=tax, totalprice=totalprice)
+
+@app.route('/forgot', methods=['GET', 'POST'])
+def forgot():
+
+    title = 'Forgot Password'
+
+    form = ForgotForm()
+    print('hiss')
+    user = User.query.filter_by(userName=form.userName.data).first()
+    if form.validate_on_submit():
+        # user = User.query.filter_by(userName=form.userName.data).first()
+        print(user)
+        print('foo')
+        print(form.question.data)
+        print(user.check_secret_key)
+        print(user.check_secret_key(form.question.data))
+        if user.check_secret_key(form.question.data):
+            print('moo')
+            return redirect(url_for('reset'))
+        print('forgot not working')
+    return render_template('forgot.html', title=title, form=form)
+
+@app.route('/reset', methods=['GET', 'POST'])
+def reset():
+    title = 'Reset Password | Task Organizer'
+    form = ForgotForm()
+    print('hi')
+    if form.validate_on_submit():
+        print('hello')
+        user = User.query.filter_by(userName=form.userName.data).first()
+        user.set_password(form.reset_password.data)
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('login'))
+    return render_template('reset.html', title=title, form=form)
+
+
 
 @app.route('/wishlist', methods=['GET','POST'])
 def wishlist():
