@@ -5,14 +5,15 @@
 
 <div class="column">
     <h2>Total Price</h2>
+    <p> Subtotal: $ {{'%0.2f'|format(subtotal|float)}}</p>
+    <p> Tax: ${{'%0.2f'|format(tax|float)}}</p>
     <p> Total: ${{'%0.2f'|format(totalprice|float)}}</p>
     <button class="btn" style="background-color: green; color: white">Submit Order</button>
 </div> 
-{% for item in cartitems %}
-
-
 
 <h2>Items in Cart</h2>
+
+{% for item in cartitems %}
 
 <ul>
     <div class="row">
@@ -43,15 +44,4 @@
 </ul>
 {% endfor %}
 
-<div class="row">
-
-
-    <div class="column">
-        <h2>Items</h2>
-        <p> Subtotal: $ {{'%0.2f'|format(subtotal|float)}}</p>
-        <p> Tax: ${{'%0.2f'|format(tax|float)}}</p>
-        <p> Total: ${{'%0.2f'|format(totalprice|float)}}</p>
-        <button class="btn" style="background-color: darkgray;">Submit Order</button>
-    </div>
-</div>
 {% endblock content %}
