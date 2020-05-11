@@ -22,38 +22,56 @@ def product():
             print("Its a POST request on product page")
             newCartItem = CartItem(itemname=request.args.get('itemname'),
                                    itemprice=request.args.get('itemprice'),
-                                   itemquantity=int(request.form['quantity']))
+                                   itemquantity=int(request.form['quantity']),
+                                   image=request.args.get('itemimage'),
+                                   itemsize=request.form['itemsize'])
             quantityToAdd = int(request.form['quantity'])
-            print(quantityToAdd)
+            cat = request.args.get('category')
+            print(cat)
             cartHasItem = db.session.query(CartItem).first() #Check to see if cart is empty
             if cartHasItem:
                 itemFound = db.session.query(CartItem).filter_by(itemname=newCartItem.itemname).first()
-                if itemFound:
-                    foundItemName = db.session.query(CartItem).filter_by(itemname=newCartItem.itemname).first().itemname
-                    foundItemQuant = db.session.query(CartItem).filter_by(itemname=newCartItem.itemname).first().itemquantity
-                    foundItemQuant += quantityToAdd
-                    print("Item already exists need quantity update")
-                    db.session.query(CartItem).filter(CartItem.itemname == foundItemName).update(
-                        {'itemquantity': foundItemQuant})  #item exists in table already, update quantity
-                    db.session.commit()
-                    return redirect(url_for('cart'))
+                if itemFound:  # item exists in table already, update quantity
+                    sizeFound = db.session.query(CartItem).filter_by(itemsize=newCartItem.itemsize).first()
+                    print(sizeFound)
+                    if sizeFound:
+                        foundItemName = db.session.query(CartItem).filter_by(itemname=newCartItem.itemname).first().itemname
+                        itemSizeFound = db.session.query(CartItem).filter_by(itemsize=newCartItem.itemsize).first().itemsize
+                        foundItemQuant = db.session.query(CartItem).filter_by(itemname=newCartItem.itemname).first().itemquantity
+                        foundItemQuant += quantityToAdd
+                        print("Item already exists need quantity update")
+                        db.session.query(CartItem).filter(CartItem.itemname == foundItemName).filter(CartItem.itemsize == itemSizeFound).update(
+                            {'itemquantity': foundItemQuant})  #item exists in table already, update quantity
+                        db.session.commit()
+                        return redirect(url_for('cart'))
+                    """else:
+                        db.session.add(newCartItem)
+                        db.session.commit()
+                        return redirect(url_for('cart'))
 
                 else: #item doesn't exist in cart yet
                     db.session.add(newCartItem)  # add new item to db
                     db.session.commit()  # commits all changes
-                    return redirect(url_for('cart'))
+                    return redirect(url_for('cart'))"""
 
-            else: #cart empty, add item
-                db.session.add(newCartItem)  # add new item to db
-                db.session.commit()  # commits all changes
-                return redirect(url_for('cart'))
+            #else: #cart empty, add item
+            db.session.add(newCartItem)  # add new item to db
+            db.session.commit()  # commits all changes
+            return redirect(url_for('cart'))
 
         elif request.form.get('addtowishlist'):
             newWSItem = WishListItem(itemname=request.args.get('itemname'),
-                                   itemprice=request.args.get('itemprice'))
-            foundItemWS = db.session.query(WishListItem).filter_by(itemname=newWSItem.itemname).first()
+                                     itemprice=request.args.get('itemprice'),
+                                     image=request.args.get('itemimage'),
+                                     itemsize=request.form['itemsize'])
+            foundItemInWS = db.session.query(WishListItem).filter_by(itemname=newWSItem.itemname).first()
+            if foundItemInWS:
+                foundSizeInWS = db.session.query(WishListItem).filter_by(itemsize=newWSItem.itemsize).first()
+                if not foundSizeInWS:
+                    db.session.add(newWSItem)
+                    db.session.commit()
 
-            if not foundItemWS:
+            else:
                 db.session.add(newWSItem)
                 db.session.commit()
 
@@ -69,31 +87,44 @@ def product():
             itemsbyname = db.session.query(Item).order_by(Item.itemname)
             return render_template('product.html', items=itemsbyname, title=title)
 
+        elif request.form.get('sortbycategories'):
+             bycategories = db.session.query(Item).order_by(Item.category).order_by(Item.itemname).all()
+             return render_template('product.html', items=bycategories, title=title)
+
     return render_template('product.html', items=items, title=title)
 
 @app.route('/cart', methods=['GET','POST'])
 def cart():
     title = 'Cart'
     cartitems = CartItem.query.all()
-    totalprice = 0.00
+    totalsubprice = 0.00
     for item in cartitems:
-        totalprice += (item.itemprice*item.itemquantity)
+        totalsubprice += (item.itemprice*item.itemquantity)
+    tax = totalsubprice*(0.08)
+    totalprice = tax + totalsubprice
 
     if request.method == 'POST':
         if request.form.get('removefromcart'):
+            print("removing from cart")
             itemToRemove = request.args.get('itemname')
-            db.session.query(CartItem).filter(CartItem.itemname == itemToRemove).delete()
+            print(itemToRemove)
+            cartitemsize = request.args.get('itemsize')
+            print(cartitemsize)
+            db.session.query(CartItem).filter(CartItem.itemname == itemToRemove).filter(
+                CartItem.itemsize == cartitemsize).delete()
             db.session.commit()
             return redirect(url_for('cart'))
 
         if request.form.get('updatequantity'):
             cartitemname = request.args.get('itemname')
+            cartitemsize = request.args.get('itemsize')
             newquantity = int(request.form['quantity'])
-            db.session.query(CartItem).filter(CartItem.itemname == cartitemname).update({'itemquantity':newquantity})
+            db.session.query(CartItem).filter(CartItem.itemname == cartitemname).filter(
+                CartItem.itemsize == cartitemsize).update({'itemquantity':newquantity})
             db.session.commit()
             return redirect(url_for('cart'))
 
-    return render_template('cart.html', cartitems=cartitems, title=title, totalprice=totalprice)
+    return render_template('cart.html', cartitems=cartitems, title=title, subtotal=totalsubprice, tax=tax, totalprice=totalprice)
 
 @app.route('/forgot', methods=['GET', 'POST'])
 def forgot():
@@ -136,44 +167,53 @@ def reset():
 def wishlist():
     title = 'wishlist'
     wishlistitems = WishListItem.query.all()
-    print(wishlistitems)
 
     if request.method == 'POST':
         if request.form.get('addtocart'):
             print("It's a POST request on wishlist page")
             newCartItemFromWL = CartItem(itemname=request.args.get('itemname'),
                                          itemprice=request.args.get('itemprice'),
-                                         itemquantity=int(request.form['quantity']))
+                                         itemquantity=int(request.form['quantity']),
+                                         image=request.args.get('itemimage'),
+                                         itemsize=request.args.get('itemsize'))
             quantityToAdd = int(request.form['quantity'])
-            print("quantity from wish list")
-            print(quantityToAdd)
             listHasAnyItems = db.session.query(CartItem).first()  # Check to see if cart is empty
             if listHasAnyItems:
                 itemFound = db.session.query(CartItem).filter_by(itemname=newCartItemFromWL.itemname).first()
-                if itemFound:
-                    foundItemName = db.session.query(CartItem).filter_by(itemname=newCartItemFromWL.itemname).first().itemname
-                    foundItemQuant = db.session.query(CartItem).filter_by(
-                        itemname=newCartItemFromWL.itemname).first().itemquantity
-                    foundItemQuant += quantityToAdd
-                    db.session.query(CartItem).filter(CartItem.itemname == foundItemName).update(
-                        # item exists in table already, update quantity
-                        {'itemquantity': foundItemQuant})
-                    db.session.commit()
-                    return redirect(url_for('cart'))
+                if itemFound:# item exists in table already, update quantity
+                    sizeFound = db.session.query(CartItem).filter_by(itemsize=newCartItemFromWL.itemsize).first()
+                    print(sizeFound)
+                    if sizeFound:
+                        foundItemName = db.session.query(CartItem).filter_by(itemname=newCartItemFromWL.itemname).first().itemname
+                        itemSizeFound = db.session.query(CartItem).filter_by(
+                            itemsize=newCartItemFromWL.itemsize).first().itemsize
+                        foundItemQuant = db.session.query(CartItem).filter_by(
+                            itemname=newCartItemFromWL.itemname).first().itemquantity
+                        foundItemQuant += quantityToAdd
+                        db.session.query(CartItem).filter(CartItem.itemname == foundItemName).filter(
+                            CartItem.itemsize == itemSizeFound).update({'itemquantity': foundItemQuant})
+                        db.session.commit()
+                        return redirect(url_for('cart'))
+                    """else:
+                        db.session.add(newCartItemFromWL)
+                        db.session.commit()
+                        return redirect(url_for('cart'))
 
                 else:  # item doesn't exist in cart yet
                     db.session.add(newCartItemFromWL)  # add new item to db
                     db.session.commit()  # commits all changes
-                    return redirect(url_for('cart'))
+                    return redirect(url_for('cart'))"""
 
-            else:  # cart empty, add item
-                db.session.add(newCartItemFromWL)  # add new item to db
-                db.session.commit()  # commits all changes
-                return redirect(url_for('cart'))
+            #else:  # cart empty, add item
+            db.session.add(newCartItemFromWL)  # add new item to db
+            db.session.commit()  # commits all changes
+            return redirect(url_for('cart'))
 
         elif request.form.get('removefromwishlist'):
-            itemToRemove = request.args.get('itemname')
-            db.session.query(WishListItem).filter(WishListItem.itemname == itemToRemove).delete()
+            itemToRemoveName = request.args.get('itemname')
+            itemToRemoveSize = request.args.get('itemsize')
+            db.session.query(WishListItem).filter(WishListItem.itemname == itemToRemoveName).filter(
+                WishListItem.itemsize == itemToRemoveSize).delete()
             db.session.commit()
             return redirect(url_for('wishlist'))
 

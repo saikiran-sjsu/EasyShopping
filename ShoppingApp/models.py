@@ -37,21 +37,27 @@ class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     itemname = db.Column(db.String(64), unique=True, nullable=False)
     itemprice = db.Column(db.Float)
+    category = db.Column(db.String(64), nullable=False)
+    image = db.Column(db.String(150), nullable=False)
 
 class CartItem(db.Model):
 
     __tablename__ = 'cart_table'
     id = db.Column(db.Integer, primary_key=True)
-    itemname = db.Column(db.String(64), unique=True, nullable=False)
-    itemquantity = db.Column(db.Integer)
+    itemname = db.Column(db.String(64), nullable=False)
     itemprice = db.Column(db.Float)
+    image = db.Column(db.String(150), nullable=False)
+    itemquantity = db.Column(db.Integer)
+    itemsize = db.Column(db.String(64), nullable=False)
 
 class WishListItem(db.Model):
 
     __tablename__ = 'wishlist_table'
     id = db.Column(db.Integer, primary_key=True)
-    itemname = db.Column(db.String(64), unique=True, nullable=False)
+    itemname = db.Column(db.String(64), nullable=False)
     itemprice = db.Column(db.Float)
+    image = db.Column(db.String(150), nullable=False)
+    itemsize = db.Column(db.String(64), nullable=False)
 
 @login.user_loader
 def load_user(id):
