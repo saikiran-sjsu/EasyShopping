@@ -3,7 +3,17 @@
 {% block content %}
 <h1>{{title}}</h1>
 
+<div class="column">
+    <h2>Total Price</h2>
+    <p> Total: ${{'%0.2f'|format(totalprice|float)}}</p>
+    <button class="btn" style="background-color: green; color: white">Submit Order</button>
+</div> 
 {% for item in cartitems %}
+
+
+
+<h2>Items in Cart</h2>
+
 <ul>
     <div class="row">
         <form action="?itemname={{item.itemname}}&itemprice={{item.itemprice}}" 
@@ -25,7 +35,7 @@
                     name="removefromcart"
                     value="1"
                     class="btn"
-                    style = "background-color: gray;"
+                    style = "background-color: red;"
                     >
                 Remove
             </button>
@@ -34,20 +44,18 @@
 </ul>
 {% endfor %}
 
-<div class="row">
+
+
+<!-- <div class="row">
     <div class="column">
         <img src=/static/images/polo.jpg width=100px>
         <h2>Polo Shirt:Hard Coded</h2>
         <p> Rating: 5/10</p>
         <p> Price: $100</p>
     </div>
-    <p></p>
+    <p></p> -->
 
 
-    <div class="column">
-        <h2>Items</h2>
-        <p> Total: ${{'%0.2f'|format(totalprice|float)}}</p>
-        <button class="btn" style="background-color: darkgray;">Submit Order</button>
-    </div>
-</div>
+ 
+<!-- </div> -->
 {% endblock content %}
