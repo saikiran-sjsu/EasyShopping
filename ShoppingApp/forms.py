@@ -20,5 +20,10 @@ class LoginForm(FlaskForm):
      password = PasswordField('Password')
      submit = SubmitField('Submit')
 
+class ForgotForm(FlaskForm):
+     userName = StringField('User Name')
+     question = PasswordField('Secret Question')
+     reset_password = PasswordField('Password')
+     reset = SubmitField('Reset')
 
 

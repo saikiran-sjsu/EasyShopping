@@ -3,33 +3,52 @@
 {% block content %}
 <h1>{{title}}</h1>
 
+<div class="column">
+    <form action="" method="POST">
+        <h2>Total Price</h2>
+        <p> Subtotal: $ {{'%0.2f'|format(subtotal|float)}}</p>
+        <p> Tax: ${{'%0.2f'|format(tax|float)}}</p>
+        <p> Total: ${{'%0.2f'|format(totalprice|float)}}</p>
+        <button name="submitorder"
+                value=1
+                class="btn"
+                style="background-color: green; color: white">
+            Submit Order
+        </button>
+    </form>
+</div> 
+
+<h2>Items in Cart</h2>
+
 {% for item in cartitems %}
+
 <ul>
     <div class="row">
-        <form action="" method="POST">
-            <img src=/static/images/polo.jpg width=100px>
+        <form action="?itemname={{item.itemname}}&itemprice={{item.itemprice}}&itemsize={{item.itemsize}}"
+              method="POST">
+            <img src={{item.image}} width=100px>
             <h2>{{item.itemname}}</h2>
-            <p>Quantity: x{{item.itemquantity}}</p>
+            <label>Quantity: <input type="number" name="quantity" placeholder="Quantity" value={{item.itemquantity}} min="1"></label>
+            <button type="submit"
+                    name="updatequantity"
+                    value=1
+                    class="btn"
+                    style="background-color: gray;">
+                Update
+            </button>
+            <p>Size: {{item.itemsize}}</p>
             <p>Price: ${{'%0.2f'|format(item.itemprice|float)}}</p>
+            <button type="submit"
+                    name="removefromcart"
+                    value="1"
+                    class="btn"
+                    style = "background-color: red;"
+                    >
+                Remove
+            </button>
         </form>
     </div>
 </ul>
 {% endfor %}
 
-<div class="row">
-    <div class="column">
-        <img src=/static/images/polo.jpg width=100px>
-        <h2>Polo Shirt:Hard Coded</h2>
-        <p> Rating: 5/10</p>
-        <p> Price: $100</p>
-    </div>
-    <p></p>
-
-
-    <div class="column">
-        <h2>Items</h2>
-        <p> Total: ${{'%0.2f'|format(totalprice|float)}}</p>
-        <button class="btn" style="background-color: darkgray;">Submit Order</button>
-    </div>
-</div>
 {% endblock content %}

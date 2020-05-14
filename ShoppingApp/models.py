@@ -16,20 +16,20 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(128), nullable=False)
     hint = db.Column(db.String(128), nullable=False)
 
-    def __repr__(self):
-        return '<User:{}>'.format(self.userName)
-
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
-    def set_hint(self, hint):
-        self.hint = generate_password_hash(hint)
+    def set_hint(self, password):
+        self.hint = generate_password_hash(password)
 
-    def check_secret_key(self, hint):
-        return check_password_hash(self.hint, hint)
+    def check_secret_key(self, password):
+        return check_password_hash(self.hint, password)
+
+    def __repr__(self):
+        return '<User:{}>'.format(self.userName)
 
 class Item(db.Model):
 
@@ -37,21 +37,36 @@ class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     itemname = db.Column(db.String(64), unique=True, nullable=False)
     itemprice = db.Column(db.Float)
+    category = db.Column(db.String(64), nullable=False)
+    image = db.Column(db.String(150), nullable=False)
 
 class CartItem(db.Model):
 
     __tablename__ = 'cart_table'
     id = db.Column(db.Integer, primary_key=True)
-    itemname = db.Column(db.String(64), unique=True, nullable=False)
-    itemquantity = db.Column(db.Integer)
+    itemname = db.Column(db.String(64), nullable=False)
     itemprice = db.Column(db.Float)
+    image = db.Column(db.String(150), nullable=False)
+    itemquantity = db.Column(db.Integer)
+    itemsize = db.Column(db.String(64), nullable=False)
 
 class WishListItem(db.Model):
 
     __tablename__ = 'wishlist_table'
     id = db.Column(db.Integer, primary_key=True)
-    itemname = db.Column(db.String(64), unique=True, nullable=False)
+    itemname = db.Column(db.String(64), nullable=False)
     itemprice = db.Column(db.Float)
+    image = db.Column(db.String(150), nullable=False)
+    itemsize = db.Column(db.String(64), nullable=False)
+
+class InvoiceItem(db.Model):
+
+    __tablename__ = 'invoice_table'
+    id = db.Column(db.Integer, primary_key=True)
+    items = db.Column(db.String(10000), nullable=False)
+    subtotal = db.Column(db.Float)
+    total = db.Column(db.Float)
+    tax = db.Column(db.Float)
 
 @login.user_loader
 def load_user(id):

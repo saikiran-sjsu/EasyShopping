@@ -1,74 +1,110 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{{title}}</h1>
+<center>
+  <h1>{{title}}</h1>
+</center>
+{% if current_user.is_anonymous %}
+<center>
+  <form action="" method="POST" id="sort">
+    Sort By:
+    <select onchange="this.form.submit();" id="sortselection" name="dropdown" class="form-control" style="width:200px;">
+      <option value="highlow">Price: High to low</option>
+      <option value="lowhigh">Price: Low to high</option>
+      <option value="alphabet">Alphabetically</option>
+      <option value="bycategory">Category</option>
+    </select>
+    <!-- <input type="submit" value="Submit" class="btn" style="background-color: gray;"> -->
+  </form>
 
-<div>
-    <form action="" method="POST">
-        <button type="submit"
-                name="sorthighlow"
-                value=1>
-            Sort: Price: High to low
-        </button>
-        <button type="submit"
-                name="sortlowhigh"
-                value=1>
-            Sort: Price: Low to high
-        </button>
-        <button type="submit"
-                name="sortbyname"
-                value=1>
-            Sort: alphabetically
-        </button>
-    </form>
-</div>
+</center>
+  {% for item in items %}
+  <ul>
 
-{% for item in items %}
-<ul>
-        
     <!-- <div class="column"> -->
-        <form action="?itemname={{item.itemname}}&itemprice={{item.itemprice}}"
-              method="POST"
-        >
-        <table>
-            <tr>
-            <td> <img src=/static/images/polo.jpg width=100px></td>
-            <td>{{item.itemname}}</td>
+    <form action="?itemname={{item.itemname}}&itemprice={{item.itemprice}}&category={{item.category}}&itemimage={{item.image}}" method="POST">
+      <table>
+        <tr>
+          <td><img src={{item.image}} width=100px></td>
         </tr>
         <tr>
-            <td>${{'%0.2f'|format(item.itemprice|float)}}</td>
+          <td>{{item.itemname}}</td>
         </tr>
-        </table>
-    
-            <!-- <div> -->
-                <input type="text" name="quantity" placeholder="Quantity">
-            <!-- </div> -->
-            <button
-                type="submit"
-                name="addtocart"
-                value=2
-                class = "btn"
-                style = "background-color: gray;"
-            >
-                Add to Cart
-            </button>
-            <button
-                type="submit"
-                name="addtowishlist"
-                value=1
-                class = "btn"
-                style = "background-color: gray;"
-            >
-                Add to Wish List
-            </button>
-        
-        </form>
+        <tr>
+          <td>${{'%0.2f'|format(item.itemprice|float)}}</td>
+        </tr>
+        <tr>
+          <td><label>Sizes offered: S/M/L</label></td>
+        </tr>
+      </table>
+
+      <!-- <div> -->
+      <!-- <label>Quantity: <input type="number" name="quantity" placeholder="Quantity" value=1 min="1"></label>
+      <p></p> -->
+      <!-- </div> -->
+      <!-- <button type="submit" name="addtocart" value=2 class="btn" style="background-color: gray;">
+        Add to Cart
+      </button>
+      <button type="submit" name="addtowishlist" value=1 class="btn" style="background-color: gray;">
+        Add to Wish List
+      </button> -->
+
+    </form>
     <!-- </div> -->
 
-</ul>
-{% endfor %}
+  </ul>
+  {% endfor %}
+{% else %}
+<center>
+  <form action="" method="POST" id="sort">
+    Sort By:
+    <select onchange="this.form.submit();" id="sortselection" name="dropdown" class="form-control" style="width:200px;">
+      <option value="highlow">Price: High to low</option>
+      <option value="lowhigh">Price: Low to high</option>
+      <option value="alphabet">Alphabetically</option>
+      <option value="bycategory">Category</option>
+    </select>
+    <!-- <input type="submit" value="Submit" class="btn" style="background-color: gray;"> -->
+  </form>
 
-<!-- <h2>Hardcoded Section:</h2>
+</center>
+  {% for item in items %}
+  <ul>
+    <!-- <div class="column"> -->
+    <form action="?itemname={{item.itemname}}&itemprice={{item.itemprice}}&category={{item.category}}&itemimage={{item.image}}" method="POST">
+      <table>
+        <tr>
+          <td><img src={{item.image}} width=100px></td>
+        </tr>
+        <tr>
+          <td>{{item.itemname}}</td>
+        </tr>
+        <tr>
+          <td>${{'%0.2f'|format(item.itemprice|float)}}</td>
+        </tr>
+        <tr>
+          <td><label>Size: S/M/L</label><input type="text" name="itemsize" placeholder="Size" value="M" maxlength="1" style="text-transform:uppercase"></td>
+        </tr>
+      </table>
+
+      <!-- <div> -->
+      <label>Quantity: <input type="number" name="quantity" placeholder="Quantity" value=1 min="1"></label>
+      <p></p>
+      <!-- </div> -->
+      <button type="submit" name="addtocart" value=2 class="btn" style="background-color: gray;">
+        Add to Cart
+      </button>
+      <button type="submit" name="addtowishlist" value=1 class="btn" style="background-color: gray;">
+        Add to Wish List
+      </button>
+
+    </form>
+    <!-- </div> -->
+
+  </ul>
+  {% endfor %}
+  {% endif %}
+  <!-- <h2>Hardcoded Section:</h2>
 <div class="column" >
     <img src = /static/images/polo.jpg width =100px>
     <h2>Polo Shirt</h2>
@@ -93,4 +129,4 @@
     <button> Add to Cart </button>
   </div> -->
 
-{% endblock content %}
+  {% endblock content %}
