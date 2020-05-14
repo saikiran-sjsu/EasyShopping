@@ -4,7 +4,7 @@
 <center>
   <h1>{{title}}</h1>
 </center>
-
+{% if current_user.is_anonymous %}
 <center>
   <form action="" method="POST" id="sort">
     Sort By:
@@ -21,6 +21,55 @@
   {% for item in items %}
   <ul>
 
+    <!-- <div class="column"> -->
+    <form action="?itemname={{item.itemname}}&itemprice={{item.itemprice}}&category={{item.category}}&itemimage={{item.image}}" method="POST">
+      <table>
+        <tr>
+          <td><img src={{item.image}} width=100px></td>
+        </tr>
+        <tr>
+          <td>{{item.itemname}}</td>
+        </tr>
+        <tr>
+          <td>${{'%0.2f'|format(item.itemprice|float)}}</td>
+        </tr>
+        <tr>
+          <td><label>Sizes offered: S/M/L</label></td>
+        </tr>
+      </table>
+
+      <!-- <div> -->
+      <!-- <label>Quantity: <input type="number" name="quantity" placeholder="Quantity" value=1 min="1"></label>
+      <p></p> -->
+      <!-- </div> -->
+      <!-- <button type="submit" name="addtocart" value=2 class="btn" style="background-color: gray;">
+        Add to Cart
+      </button>
+      <button type="submit" name="addtowishlist" value=1 class="btn" style="background-color: gray;">
+        Add to Wish List
+      </button> -->
+
+    </form>
+    <!-- </div> -->
+
+  </ul>
+  {% endfor %}
+{% else %}
+<center>
+  <form action="" method="POST" id="sort">
+    Sort By:
+    <select onchange="this.form.submit();" id="sortselection" name="dropdown" class="form-control" style="width:200px;">
+      <option value="highlow">Price: High to low</option>
+      <option value="lowhigh">Price: Low to high</option>
+      <option value="alphabet">Alphabetically</option>
+      <option value="bycategory">Category</option>
+    </select>
+    <!-- <input type="submit" value="Submit" class="btn" style="background-color: gray;"> -->
+  </form>
+
+</center>
+  {% for item in items %}
+  <ul>
     <!-- <div class="column"> -->
     <form action="?itemname={{item.itemname}}&itemprice={{item.itemprice}}&category={{item.category}}&itemimage={{item.image}}" method="POST">
       <table>
@@ -54,7 +103,7 @@
 
   </ul>
   {% endfor %}
-
+  {% endif %}
   <!-- <h2>Hardcoded Section:</h2>
 <div class="column" >
     <img src = /static/images/polo.jpg width =100px>
