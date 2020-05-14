@@ -108,11 +108,12 @@ def product():
         print(request.form.get('addtocart'))
         if request.form.get('addtocart'):
             print("Its a POST request on product page")
+            changesize = request.form['itemsize']
             newCartItem = CartItem(itemname=request.args.get('itemname'),
                                    itemprice=request.args.get('itemprice'),
                                    itemquantity=int(request.form['quantity']),
                                    image=request.args.get('itemimage'),
-                                   itemsize=request.form['itemsize'])
+                                   itemsize=changesize.capitalize())
             quantityToAdd = int(request.form['quantity'])
             cat = request.args.get('category')
             print(cat)
@@ -148,10 +149,11 @@ def product():
             return redirect(url_for('cart'))
 
         elif request.form.get('addtowishlist'):
+            changesize = request.form['itemsize']
             newWSItem = WishListItem(itemname=request.args.get('itemname'),
                                      itemprice=request.args.get('itemprice'),
                                      image=request.args.get('itemimage'),
-                                     itemsize=request.form['itemsize'])
+                                     itemsize=changesize.capitalize())
             foundItemInWS = db.session.query(WishListItem).filter_by(itemname=newWSItem.itemname).first()
             if foundItemInWS:
                 foundSizeInWS = db.session.query(WishListItem).filter_by(itemsize=newWSItem.itemsize).first()
@@ -206,11 +208,12 @@ def wishlist():
     if request.method == 'POST':
         if request.form.get('addtocart'):
             print("It's a POST request on wishlist page")
+            changesize = request.form['itemsize']
             newCartItemFromWL = CartItem(itemname=request.args.get('itemname'),
                                          itemprice=request.args.get('itemprice'),
                                          itemquantity=int(request.form['quantity']),
                                          image=request.args.get('itemimage'),
-                                         itemsize=request.args.get('itemsize'))
+                                         itemsize=changesize.capitalize())
             quantityToAdd = int(request.form['quantity'])
             listHasAnyItems = db.session.query(CartItem).first()  # Check to see if cart is empty
             if listHasAnyItems:
