@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{title}}</h1>
+<br />
+<h2>Thank you for your order!</h2>
+<br />
+{% for invoice in invoicelist %}
+
+<ul>
+    <div id={{invoice.id}} class="col">
+        <h2>Invoice# {{invoice.id}}</h2>
+        <p id="p{{invoice.id}}"><b>Subtotal: </b>${{'%0.2f'|format(invoice.subtotal|float)}}</p>
+        <p><b>Tax: </b>${{'%0.2f'|format(invoice.tax|float)}}</p>
+        <p><b>Total: ${{'%0.2f'|format(invoice.total|float)}}</b></p>
+        <script>
+            var num = '{{invoice.id}}'
+            var rawStr = '{{invoice.items}}';
+            var items = rawStr.split("#");
+            items.forEach(parseEachItem);
+
+            function parseEachItem(item, index) {
+                // Create a new paragraph element
+                var para = document.createElement("p");
+                var node = document.createTextNode(item);
+                para.appendChild(node);
+
+                // Insert the new paragraph element before the paragraph element with p_num (subtotal)
+                var invoiceDivElement = document.getElementById(num);
+                var subTotalElement = document.getElementById("p" + num);
+                invoiceDivElement.insertBefore(para, subTotalElement);
+            }
+        </script>
+    </div>
+</ul>
+
+<br />
+<br />
+{% endfor %}
+
+{% endblock content %}

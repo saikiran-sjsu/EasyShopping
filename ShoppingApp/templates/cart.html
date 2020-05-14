@@ -4,11 +4,18 @@
 <h1>{{title}}</h1>
 
 <div class="column">
-    <h2>Total Price</h2>
-    <p> Subtotal: $ {{'%0.2f'|format(subtotal|float)}}</p>
-    <p> Tax: ${{'%0.2f'|format(tax|float)}}</p>
-    <p> Total: ${{'%0.2f'|format(totalprice|float)}}</p>
-    <button class="btn" style="background-color: green; color: white">Submit Order</button>
+    <form action="" method="POST">
+        <h2>Total Price</h2>
+        <p> Subtotal: $ {{'%0.2f'|format(subtotal|float)}}</p>
+        <p> Tax: ${{'%0.2f'|format(tax|float)}}</p>
+        <p> Total: ${{'%0.2f'|format(totalprice|float)}}</p>
+        <button name="submitorder"
+                value=1
+                class="btn"
+                style="background-color: green; color: white">
+            Submit Order
+        </button>
+    </form>
 </div> 
 
 <h2>Items in Cart</h2>
