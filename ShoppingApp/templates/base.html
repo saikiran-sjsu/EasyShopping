@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" dir="ltr">
     <link rel ='stylesheet' href ="static/css/main.css" >
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -49,15 +49,16 @@
     </div> -->
     
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="nav-link"  href = "{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a></li>
-        <li class="nav-item"><a class="nav-link"  href = "{{ url_for('login') }}" >Login</a></li>
-        <li class="nav-item"><a class="nav-link"  href = "{{ url_for('logout') }}" >Logout</a></li>
-        <li class="nav-item"><a class="nav-link"  href = "{{ url_for('register') }}">Register</a></li>
-        <li class="nav-item"><a class="nav-link"  href = "{{ url_for('product') }}" >Products</a></li>
-        <li class="nav-item"><a class="nav-link"  href = "{{ url_for('cart') }}">Cart</a></li>
-        <li class="nav-item"><a class="nav-link"  href = "{{ url_for('wishlist') }}">Wishlist</a></li>
-      </ul>
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('register') }}">Register</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('product') }}">Products</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('cart') }}">Cart</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('wishlist') }}">Wishlist</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('invoice') }}">Invoice(s)</a></li>
+        </ul>
       
     
      

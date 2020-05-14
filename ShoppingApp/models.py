@@ -59,6 +59,15 @@ class WishListItem(db.Model):
     image = db.Column(db.String(150), nullable=False)
     itemsize = db.Column(db.String(64), nullable=False)
 
+class InvoiceItem(db.Model):
+
+    __tablename__ = 'invoice_table'
+    id = db.Column(db.Integer, primary_key=True)
+    items = db.Column(db.String(10000), nullable=False)
+    subtotal = db.Column(db.Float)
+    total = db.Column(db.Float)
+    tax = db.Column(db.Float)
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))

@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request
 from ShoppingApp import app, db
 from ShoppingApp.forms import RegisterForm, LoginForm, ForgotForm
-from ShoppingApp.models import User, Item, CartItem, WishListItem
+from ShoppingApp.models import User, Item, CartItem, WishListItem, InvoiceItem
 from flask_login import login_user, logout_user, current_user
 
 @app.route('/')
@@ -124,7 +124,38 @@ def cart():
             db.session.commit()
             return redirect(url_for('cart'))
 
+        if request.form.get('submitorder'):
+            firstItem = cartitems.pop(0)
+            itemsStr = firstItem.itemname + " " + \
+                       firstItem.itemsize + " x" + \
+                       str(firstItem.itemquantity) + " $" +\
+                       str(firstItem.itemprice) + "0"
+            db.session.query(CartItem).filter(CartItem.itemname == firstItem.itemname).filter(
+                CartItem.itemsize == firstItem.itemsize).delete()
+
+            for item in cartitems:
+                itemsStr += "#" + item.itemname + " " +\
+                            item.itemsize + " x" +\
+                            str(item.itemquantity) + " $" +\
+                            str(item.itemprice) + "0"
+                db.session.query(CartItem).filter(CartItem.itemname == item.itemname).filter(
+                    CartItem.itemsize == item.itemsize).delete()
+            #print(itemsStr)
+            newInvoiceItem = InvoiceItem(items=itemsStr,
+                                         subtotal=totalsubprice,
+                                         total=totalprice,
+                                         tax=tax)
+            db.session.add(newInvoiceItem)
+            db.session.commit()
+            return redirect(url_for('invoice'))
+
     return render_template('cart.html', cartitems=cartitems, title=title, subtotal=totalsubprice, tax=tax, totalprice=totalprice)
+
+@app.route('/invoice', methods=['GET'])
+def invoice():
+    title = 'Invoice(s)'
+    items = InvoiceItem.query.all()
+    return render_template('invoice.html', invoicelist=items, title=title)
 
 @app.route('/forgot', methods=['GET', 'POST'])
 def forgot():
