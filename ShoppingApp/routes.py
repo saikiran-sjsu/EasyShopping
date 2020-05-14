@@ -75,21 +75,22 @@ def product():
                 db.session.add(newWSItem)
                 db.session.commit()
 
-        elif request.form.get('sorthighlow'):
+        sort_choice = request.form.get('dropdown')
+        if sort_choice == "highlow":
             itemshighlow = db.session.query(Item).order_by(Item.itemprice.desc())
             return render_template('product.html', items=itemshighlow, title=title)
 
-        elif request.form.get('sortlowhigh'):
+        elif sort_choice == "lowhigh":
             itemslowhigh = db.session.query(Item).order_by(Item.itemprice)
             return render_template('product.html', items=itemslowhigh, title=title)
 
-        elif request.form.get('sortbyname'):
+        elif sort_choice == "alphabet":
             itemsbyname = db.session.query(Item).order_by(Item.itemname)
             return render_template('product.html', items=itemsbyname, title=title)
 
-        elif request.form.get('sortbycategories'):
-             bycategories = db.session.query(Item).order_by(Item.category).order_by(Item.itemname).all()
-             return render_template('product.html', items=bycategories, title=title)
+        elif sort_choice =="bycategory":
+            bycategories = db.session.query(Item).order_by(Item.category).order_by(Item.itemname).all()
+            return render_template('product.html', items=bycategories, title=title)
 
     return render_template('product.html', items=items, title=title)
 
