@@ -74,7 +74,11 @@ def cart():
 def invoice():
     title = 'Invoice(s)'
     items = InvoiceItem.query.all()
-    return render_template('invoice.html', invoicelist=items, title=title)
+    lastitemarray =[]
+    lastitem = db.session.query(InvoiceItem).order_by(InvoiceItem.id.desc()).first()
+    lastitemarray.append(lastitem)
+    print(lastitem)
+    return render_template('invoice.html', invoicelist=lastitemarray, title=title)
 
 @app.route('/forgot', methods=['GET', 'POST'])
 def forgot():
