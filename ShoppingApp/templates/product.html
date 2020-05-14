@@ -5,18 +5,19 @@
   <h1>{{title}}</h1>
 </center>
 
+<center>
   <form action="" method="POST" id="sort">
     Sort By:
-    <select id="sortselection" name="dropdown" class="form-control" style="width:200px;">
+    <select onchange="this.form.submit();" id="sortselection" name="dropdown" class="form-control" style="width:200px;">
       <option value="highlow">Price: High to low</option>
       <option value="lowhigh">Price: Low to high</option>
       <option value="alphabet">Alphabetically</option>
       <option value="bycategory">Category</option>
     </select>
-    <input type="submit" value="Submit" class="btn" style="background-color: gray;">
+    <!-- <input type="submit" value="Submit" class="btn" style="background-color: gray;"> -->
   </form>
 
-
+</center>
   {% for item in items %}
   <ul>
 
@@ -39,6 +40,7 @@
 
       <!-- <div> -->
       <label>Quantity: <input type="number" name="quantity" placeholder="Quantity" value=1 min="1"></label>
+      <p></p>
       <!-- </div> -->
       <button type="submit" name="addtocart" value=2 class="btn" style="background-color: gray;">
         Add to Cart
