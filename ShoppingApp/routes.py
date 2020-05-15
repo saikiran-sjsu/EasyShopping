@@ -4,18 +4,20 @@ from ShoppingApp.forms import RegisterForm, LoginForm, ForgotForm
 from ShoppingApp.models import User, Item, CartItem, WishListItem, InvoiceItem
 from flask_login import login_user, logout_user, current_user
 
-
+#Home page
 @app.route('/')
 @app.route('/home')
 def home():
     title = 'Home'
     return render_template('home.html', title=title)
 
-
+#Decorator & functions related to the cart page
 @app.route('/cart', methods=['GET','POST'])
 def cart():
     title = 'Cart'
+    #Get the list of items from the cart table
     cartitems = CartItem.query.all()
+    #Find the subtotal, tax and total based on the items in the cart table
     totalsubprice = 0.00
     for item in cartitems:
         totalsubprice += (item.itemprice*item.itemquantity)
@@ -23,17 +25,20 @@ def cart():
     totalprice = tax + totalsubprice
 
     if request.method == 'POST':
+
+        # Gets the name & size of an item to search for a row with the same
+        # values to delete that row from the cart table
         if request.form.get('removefromcart'):
-            print("removing from cart")
             itemToRemove = request.args.get('itemname')
-            print(itemToRemove)
             cartitemsize = request.args.get('itemsize')
-            print(cartitemsize)
             db.session.query(CartItem).filter(CartItem.itemname == itemToRemove).filter(
                 CartItem.itemsize == cartitemsize).delete()
             db.session.commit()
             return redirect(url_for('cart'))
 
+        # Gets the name and size of an item to search for a row with the same values
+        # to update that row's quantity attribute
+        # to update that row's quantity attribute
         if request.form.get('updatequantity'):
             cartitemname = request.args.get('itemname')
             cartitemsize = request.args.get('itemsize')
@@ -43,6 +48,9 @@ def cart():
             db.session.commit()
             return redirect(url_for('cart'))
 
+        # Create string that is a list of all the items in the cart table, then create
+        # an invoice containing the list of items, subtotal, tax and total before adding
+        # invoice to the table of invoices
         if request.form.get('submitorder'):
             firstItem = cartitems.pop(0)
             itemsStr = firstItem.itemname + " " + \
@@ -59,7 +67,7 @@ def cart():
                             str(item.itemprice) + "0"
                 db.session.query(CartItem).filter(CartItem.itemname == item.itemname).filter(
                     CartItem.itemsize == item.itemsize).delete()
-            #print(itemsStr)
+
             newInvoiceItem = InvoiceItem(items=itemsStr,
                                          subtotal=totalsubprice,
                                          total=totalprice,
@@ -70,48 +78,50 @@ def cart():
 
     return render_template('cart.html', cartitems=cartitems, title=title, subtotal=totalsubprice, tax=tax, totalprice=totalprice)
 
+#decorator and functions for the invoice
 @app.route('/invoice', methods=['GET'])
 def invoice():
     title = 'Invoice(s)'
+    #originally, the invoice page contained all invoices currently in the database
     items = InvoiceItem.query.all()
+    # then a list with only the latest invoice was created so that the invoice page
+    # only displayed the most recent invoice
     lastitemarray =[]
     lastitem = db.session.query(InvoiceItem).order_by(InvoiceItem.id.desc()).first()
     lastitemarray.append(lastitem)
-    print(lastitem)
+
     return render_template('invoice.html', invoicelist=lastitemarray, title=title)
 
+#decorator and exection of the forgot password feature
 @app.route('/forgot', methods=['GET', 'POST'])
 def forgot():
 
     title = 'Forgot Password'
-
     form = ForgotForm()
-    print('hiss')
     user = User.query.filter_by(userName=form.userName.data).first()
     if form.validate_on_submit():
+        # print statements for testing the forgot password feature
         # user = User.query.filter_by(userName=form.userName.data).first()
-        print(user)
-        print('foo')
-        print(form.question.data)
-        print(user.check_secret_key)
-        print(user.check_secret_key(form.question.data))
+        # print(form.question.data)
+        # print(user.check_secret_key)
+        # print(user.check_secret_key(form.question.data))
         if user.check_secret_key(form.question.data):
             print('moo')
             return redirect(url_for('reset'))
         print('forgot not working')
     return render_template('forgot.html', title=title, form=form)
 
-
+#decorator & functions on the product page
 @app.route('/product', methods=['GET','POST'])
 def product():
     title = 'Products'
     items = Item.query.all()
-    print(items)
 
     if request.method == 'POST':
-        print(request.form.get('addtocart'))
+        # Create a cart item, then check if that item in a specific size already exists in the cart,
+        # if it does, then just update the quantity.
+        # If the cart is empty, then just add the new item to the cart.
         if request.form.get('addtocart'):
-            print("Its a POST request on product page")
             changesize = request.form['itemsize']
             newCartItem = CartItem(itemname=request.args.get('itemname'),
                                    itemprice=request.args.get('itemprice'),
@@ -119,39 +129,28 @@ def product():
                                    image=request.args.get('itemimage'),
                                    itemsize=changesize.capitalize())
             quantityToAdd = int(request.form['quantity'])
-            cat = request.args.get('category')
-            print(cat)
-            cartHasItem = db.session.query(CartItem).first() #Check to see if cart is empty
+            # Check to see if cart is empty
+            cartHasItem = db.session.query(CartItem).first()
             if cartHasItem:
                 itemFound = db.session.query(CartItem).filter_by(itemname=newCartItem.itemname).first()
-                if itemFound:  # item exists in table already, update quantity
+                if itemFound:
                     sizeFound = db.session.query(CartItem).filter_by(itemsize=newCartItem.itemsize).first()
-                    print(sizeFound)
                     if sizeFound:
                         foundItemName = db.session.query(CartItem).filter_by(itemname=newCartItem.itemname).first().itemname
                         itemSizeFound = db.session.query(CartItem).filter_by(itemsize=newCartItem.itemsize).first().itemsize
                         foundItemQuant = db.session.query(CartItem).filter_by(itemname=newCartItem.itemname).first().itemquantity
                         foundItemQuant += quantityToAdd
-                        print("Item already exists need quantity update")
                         db.session.query(CartItem).filter(CartItem.itemname == foundItemName).filter(CartItem.itemsize == itemSizeFound).update(
-                            {'itemquantity': foundItemQuant})  #item exists in table already, update quantity
-                        db.session.commit()
-                        return redirect(url_for('cart'))
-                    """else:
-                        db.session.add(newCartItem)
+                            {'itemquantity': foundItemQuant})  # update quantity
                         db.session.commit()
                         return redirect(url_for('cart'))
 
-                else: #item doesn't exist in cart yet
-                    db.session.add(newCartItem)  # add new item to db
-                    db.session.commit()  # commits all changes
-                    return redirect(url_for('cart'))"""
-
-            #else: #cart empty, add item
-            db.session.add(newCartItem)  # add new item to db
-            db.session.commit()  # commits all changes
+            db.session.add(newCartItem)
+            db.session.commit()
             return redirect(url_for('cart'))
 
+        # Create a wishlist item using data from the html page, then find if the item is already in the wish lis
+        # If the item is already there, do nothing, otherwise, add the item to the wish list
         elif request.form.get('addtowishlist'):
             changesize = request.form['itemsize']
             newWSItem = WishListItem(itemname=request.args.get('itemname'),
