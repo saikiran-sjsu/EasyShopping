@@ -11,6 +11,7 @@ def home():
     title = 'Home'
     return render_template('home.html', title=title)
 
+
 #Decorator & functions related to the cart page
 @app.route('/cart', methods=['GET','POST'])
 def cart():
@@ -25,9 +26,8 @@ def cart():
     totalprice = tax + totalsubprice
 
     if request.method == 'POST':
-
         # Gets the name & size of an item to search for a row with the same
-        # values to delete that row from the cart table
+        #   values to delete that row from the cart table
         if request.form.get('removefromcart'):
             itemToRemove = request.args.get('itemname')
             cartitemsize = request.args.get('itemsize')
@@ -37,8 +37,8 @@ def cart():
             return redirect(url_for('cart'))
 
         # Gets the name and size of an item to search for a row with the same values
-        # to update that row's quantity attribute
-        # to update that row's quantity attribute
+        #   to update that row's quantity attribute
+        #   to update that row's quantity attribute
         if request.form.get('updatequantity'):
             cartitemname = request.args.get('itemname')
             cartitemsize = request.args.get('itemsize')
@@ -49,8 +49,8 @@ def cart():
             return redirect(url_for('cart'))
 
         # Create string that is a list of all the items in the cart table, then create
-        # an invoice containing the list of items, subtotal, tax and total before adding
-        # invoice to the table of invoices
+        #   an invoice containing the list of items, subtotal, tax and total before adding
+        #   invoice to the table of invoices
         if request.form.get('submitorder'):
             firstItem = cartitems.pop(0)
             itemsStr = firstItem.itemname + " " + \
@@ -59,7 +59,7 @@ def cart():
                        str(firstItem.itemprice) + "0"
             db.session.query(CartItem).filter(CartItem.itemname == firstItem.itemname).filter(
                 CartItem.itemsize == firstItem.itemsize).delete()
-
+            # Concatenate the information of all the items that are still in the cart
             for item in cartitems:
                 itemsStr += "#" + item.itemname + " " +\
                             item.itemsize + " x" +\
@@ -78,27 +78,29 @@ def cart():
 
     return render_template('cart.html', cartitems=cartitems, title=title, subtotal=totalsubprice, tax=tax, totalprice=totalprice)
 
+
 #decorator and functions for the invoice
 @app.route('/invoice', methods=['GET'])
 def invoice():
     title = 'Invoice(s)'
-    #originally, the invoice page contained all invoices currently in the database
+    # Originally, the invoice page contained all invoices currently in the database
     items = InvoiceItem.query.all()
-    # then a list with only the latest invoice was created so that the invoice page
-    # only displayed the most recent invoice
+    # Then a list with only the latest invoice was created so that the invoice page
+    #   only displayed the most recent invoice
     lastitemarray =[]
     lastitem = db.session.query(InvoiceItem).order_by(InvoiceItem.id.desc()).first()
     lastitemarray.append(lastitem)
 
     return render_template('invoice.html', invoicelist=lastitemarray, title=title)
 
+
 #decorator and exection of the forgot password feature
 @app.route('/forgot', methods=['GET', 'POST'])
 def forgot():
-
     title = 'Forgot Password'
     form = ForgotForm()
     user = User.query.filter_by(userName=form.userName.data).first()
+
     if form.validate_on_submit():
         # print statements for testing the forgot password feature
         # user = User.query.filter_by(userName=form.userName.data).first()
@@ -111,6 +113,7 @@ def forgot():
         print('forgot not working')
     return render_template('forgot.html', title=title, form=form)
 
+
 #decorator & functions on the product page
 @app.route('/product', methods=['GET','POST'])
 def product():
@@ -119,8 +122,8 @@ def product():
 
     if request.method == 'POST':
         # Create a cart item, then check if that item in a specific size already exists in the cart,
-        # if it does, then just update the quantity.
-        # If the cart is empty, then just add the new item to the cart.
+        #   if it does, then just update the quantity.
+        #   If the cart is empty, then just add the new item to the cart.
         if request.form.get('addtocart'):
             changesize = request.form['itemsize']
             newCartItem = CartItem(itemname=request.args.get('itemname'),
@@ -150,7 +153,7 @@ def product():
             return redirect(url_for('cart'))
 
         # Create a wishlist item using data from the html page, then find if the item is already in the wish lis
-        # If the item is already there, do nothing, otherwise, add the item to the wish list
+        #   If the item is already there, do nothing, otherwise, add the item to the wish list
         elif request.form.get('addtowishlist'):
             changesize = request.form['itemsize']
             newWSItem = WishListItem(itemname=request.args.get('itemname'),
@@ -163,30 +166,34 @@ def product():
                 if not foundSizeInWS:
                     db.session.add(newWSItem)
                     db.session.commit()
-
             else:
                 db.session.add(newWSItem)
                 db.session.commit()
 
+        # The following 4 groups of code retrieves the user's choice from the html page
+        #   and a query is done to sort the list of items in the database that are shown on
+        #   the products page.
         sort_choice = request.form.get('dropdown')
+        # Sort by price: high to low
         if sort_choice == "highlow":
             itemshighlow = db.session.query(Item).order_by(Item.itemprice.desc())
             return render_template('product.html', items=itemshighlow, title=title)
-
+        # Sort by price: low to high
         elif sort_choice == "lowhigh":
             itemslowhigh = db.session.query(Item).order_by(Item.itemprice)
             return render_template('product.html', items=itemslowhigh, title=title)
-
+        # Sort by the item's name in alphabetical order
         elif sort_choice == "alphabet":
             itemsbyname = db.session.query(Item).order_by(Item.itemname)
             return render_template('product.html', items=itemsbyname, title=title)
-
+        # Sort based on an item's category and within each category, sort alphabetically
         elif sort_choice =="bycategory":
             bycategories = db.session.query(Item).order_by(Item.category).order_by(Item.itemname).all()
             return render_template('product.html', items=bycategories, title=title)
 
     return render_template('product.html', items=items, title=title)
 
+# Decorator and function for resetting the password
 @app.route('/reset', methods=['GET', 'POST'])
 def reset():
     title = 'Reset Password | Task Organizer'
@@ -201,16 +208,17 @@ def reset():
         return redirect(url_for('login'))
     return render_template('reset.html', title=title, form=form)
 
-
-
+# Decorator and functions related to the wish list page
 @app.route('/wishlist', methods=['GET','POST'])
 def wishlist():
     title = 'Wishlist'
     wishlistitems = WishListItem.query.all()
 
     if request.method == 'POST':
+        # When the 'add to cart button is pressed, create a cart item using data from the html,
+        #   then find if the item already exists in the cart, if it does then add the item
+        #   to the cart, otherwise, update the quantity of that item
         if request.form.get('addtocart'):
-            print("It's a POST request on wishlist page")
             changesize = request.form['itemsize']
             newCartItemFromWL = CartItem(itemname=request.args.get('itemname'),
                                          itemprice=request.args.get('itemprice'),
@@ -218,14 +226,16 @@ def wishlist():
                                          image=request.args.get('itemimage'),
                                          itemsize=changesize.capitalize())
             quantityToAdd = int(request.form['quantity'])
-            listHasAnyItems = db.session.query(CartItem).first()  # Check to see if cart is empty
+            # Check to see if cart is empty
+            listHasAnyItems = db.session.query(CartItem).first()
             if listHasAnyItems:
                 itemFound = db.session.query(CartItem).filter_by(itemname=newCartItemFromWL.itemname).first()
-                if itemFound:# item exists in table already, update quantity
+                # item exists in table already, update quantity
+                if itemFound:
                     sizeFound = db.session.query(CartItem).filter_by(itemsize=newCartItemFromWL.itemsize).first()
-                    print(sizeFound)
                     if sizeFound:
-                        foundItemName = db.session.query(CartItem).filter_by(itemname=newCartItemFromWL.itemname).first().itemname
+                        foundItemName = db.session.query(CartItem).filter_by(
+                            itemname=newCartItemFromWL.itemname).first().itemname
                         itemSizeFound = db.session.query(CartItem).filter_by(
                             itemsize=newCartItemFromWL.itemsize).first().itemsize
                         foundItemQuant = db.session.query(CartItem).filter_by(
@@ -235,21 +245,14 @@ def wishlist():
                             CartItem.itemsize == itemSizeFound).update({'itemquantity': foundItemQuant})
                         db.session.commit()
                         return redirect(url_for('cart'))
-                    """else:
-                        db.session.add(newCartItemFromWL)
-                        db.session.commit()
-                        return redirect(url_for('cart'))
 
-                else:  # item doesn't exist in cart yet
-                    db.session.add(newCartItemFromWL)  # add new item to db
-                    db.session.commit()  # commits all changes
-                    return redirect(url_for('cart'))"""
-
-            #else:  # cart empty, add item
-            db.session.add(newCartItemFromWL)  # add new item to db
-            db.session.commit()  # commits all changes
+            # cart empty, add item
+            db.session.add(newCartItemFromWL)
+            db.session.commit()
             return redirect(url_for('cart'))
 
+        # If the user presses the 'remove' button for an item, search for that item in the database
+        #   and once found, remove it from the wish list table
         elif request.form.get('removefromwishlist'):
             itemToRemoveName = request.args.get('itemname')
             itemToRemoveSize = request.args.get('itemsize')
@@ -258,16 +261,17 @@ def wishlist():
             db.session.commit()
             return redirect(url_for('wishlist'))
 
-
     return render_template('wishlist.html', items=wishlistitems, title=title)
 
-
+# Decorator and function to validate a user when they are trying to log in
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     title = 'Login'
     form = LoginForm()
 
-    print(current_user.is_authenticated)
+    # For a user to access buttons to add and move items to and from the wish
+    #   list and cart, the user must first log in, otherwise, they can only
+    #   view the product list
     if current_user.is_authenticated:
         print(current_user.is_authenticated)
         return redirect(url_for('product'))
@@ -281,6 +285,7 @@ def login():
 
     return render_template('login.html', title=title, form=form)
 
+# Decorator and function for when users press the logout button
 @app.route('/logout')
 def logout():
     user = current_user
@@ -290,6 +295,9 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
+# Decorator and function for users to input their information and create a user
+#   account, which will create a row containing information on a user into the
+#   user table in the database
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     title = 'Register'
