@@ -93,6 +93,15 @@ def invoice():
 
     return render_template('invoice.html', invoicelist=lastitemarray, title=title)
 
+@app.route('/admin')
+def admin():
+    title = 'admin'
+    # tasks = Task.query.filter_by(user_id=current_user.id)
+
+    users = User.query.all()
+
+    return render_template('admin.html', title=title, users=users)
+
 
 #decorator and exection of the forgot password feature
 @app.route('/forgot', methods=['GET', 'POST'])
