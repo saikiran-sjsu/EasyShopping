@@ -19,14 +19,14 @@
   padding: 10px;
   background-image: linear-gradient(-45deg, rgba(77, 151, 181, 0.8), rgba(130, 181, 201, 0.6), rgba(211, 211, 211, 0.4));
 }
-/* style*/
-.img {
+/* style for all imgs*/
+.img {  
   height: 50px;
   width: 50px;
  
 }
 
-/* next & previous buttons */
+/* next & previous buttons and layout for homepage slideshow*/
  .prev, .next {
   cursor: pointer;
   position: absolute;
@@ -39,6 +39,14 @@
   user-select: none;
   margin-top: -22px;
 }
+
+.slides-container{
+  max-width: 1000px;
+  position: relative;
+  margin: auto;
+  margin-top: 20px;
+}
+
 
 /* Position */
 .next {
@@ -56,7 +64,6 @@
 }
 
 /*Nav bar for profile*/
-
 .dropdown {
   position: relative;
   display: inline-block;
@@ -101,38 +108,20 @@
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
 } 
-.profile
-{
-  left: 0;
-}
 
-#profile.dropdown:hover
-{
-  display: block;
-}
-
-/* product view */
+/* product page layout */
 .column {
   float: center;
   width: 50%;
   padding: 10px;
 }
-
+ 
 .row:after {
   content: "";
   display: table;
   clear: both;
 }
-.checked {
-  color: orange;
-}
 
-.slides-container{
-  max-width: 1000px;
-  position: relative;
-  margin: auto;
-  margin-top: 20px;
-}
 
 .prev, .next {
   cursor: pointer;
@@ -207,16 +196,8 @@ body {
     background-color: black;
   }
 
-  .btn2 {
-    background-color: black;
-    color: black;
-    font-size: 16px;
-    padding: 12px 24px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-
+  
+/* for all buttons on website */
   .btn {
     background-color: black;
     color: black;
@@ -226,31 +207,9 @@ body {
     cursor: pointer;
     border-radius: 5px;
   }
-  .btn:hover {
-    background-color: grey;
-  }
-
-  .open-button {
-    background-color: #555;
-    color: white;
-    padding: 16px 20px;
-    border: none;
-    cursor: pointer;
-    opacity: 0.8;
-    position: fixed;
-    bottom: 23px;
-    right: 28px;
-    width: 280px;
-  }
   
-  /* The popup form - hidden by default */
-  .form-popup {
-    display: none;
-    position: fixed;
-    bottom: 0;
-    right: 15px;
-    border: 3px solid #f1f1f1;
-    z-index: 9;
+  .btn:hover {
+    background-color: lightgray;
   }
   
   /* Add styles to the form container */
@@ -274,37 +233,12 @@ body {
     background-color: #ddd;
     outline: none;
   }
-  
-  /* Set a style for the submit/login button */
-  .form-container .btn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 16px 20px;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    margin-bottom:10px;
-    opacity: 0.8;
-  }
-  
-  /* Add a red background color to the cancel button */
-  .form-container .cancel {
-    background-color: red;
-  }
-  
-  /* Add some hover effects to buttons */
-  .form-container .btn:hover, .open-button:hover {
-    opacity: 1;
-  }
-
-  .mx-auto2{
-    padding-top: 10%;
-}
 
 .text-center{
     text-align: center;
 }
 
+/* for sign in and register pages*/
 .form-signin{
     width: 100%;
     max-width:330px;
