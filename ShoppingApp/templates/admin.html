@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% if current_user.is_anonymous %}
 <center>
     <br>
     <h1>Admin Table</h1>
@@ -28,6 +27,5 @@
         {% endfor %}
     </table>
 </ul>
-  {% endif %}
 </center>
 {% endblock content %}
