@@ -9,7 +9,7 @@
   {{form.hidden_tag()}}
 
   <div class="">
-    <input class = "w3-input" type="text" name="userName" placeholder="Username">
+    <input class = "w3-input" type="text" id="user" name="userName" placeholder="Username">
   </div>
   <div class="">
     <input class = "w3-input" type="text" name="firstName" placeholder="First Name">
@@ -35,9 +35,14 @@
   <div class="">
     <input class = "w3-input" type="text" name="ccv" placeholder="CCV">
   </div>
-  <p></p>
 
-  <button type = "submit" class = "btn" style= "background-color: darkgray;"> Register </button>
+  <script type="text/javascript">
+     function success() {
+       var user = document.getElementById('user').value;
+        alert("Added user: " + user)
+     }
+   </script>
+  <button type = "submit" class = "btn" style= "background-color: darkgray;" onclick="success()"> Submit </button>
   <!-- {{form.submit()}} -->
 
 </form>

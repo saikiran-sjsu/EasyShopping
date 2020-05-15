@@ -311,5 +311,5 @@ def register():
         db.session.add(users)
         db.session.commit()
         print("Account Created!")
-
+        return redirect(url_for('login'))
     return render_template('register.html', title=title, form=form)
