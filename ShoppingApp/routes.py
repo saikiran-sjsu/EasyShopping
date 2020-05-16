@@ -93,15 +93,6 @@ def invoice():
 
     return render_template('invoice.html', invoicelist=lastitemarray, title=title)
 
-@app.route('/admin')
-def admin():
-    title = 'admin'
-    # tasks = Task.query.filter_by(user_id=current_user.id)
-
-    users = User.query.all()
-
-    return render_template('admin.html', title=title, users=users)
-
 
 #decorator and exection of the forgot password feature
 @app.route('/forgot', methods=['GET', 'POST'])
@@ -224,16 +215,13 @@ def wishlist():
     wishlistitems = WishListItem.query.all()
 
     if request.method == 'POST':
-        # When the 'add to cart button is pressed, create a cart item using data from the html,
-        #   then find if the item already exists in the cart, if it does then add the item
-        #   to the cart, otherwise, update the quantity of that item
         if request.form.get('addtocart'):
-            changesize = request.form['itemsize']
+            print("It's a POST request on wishlist page")
             newCartItemFromWL = CartItem(itemname=request.args.get('itemname'),
                                          itemprice=request.args.get('itemprice'),
                                          itemquantity=int(request.form['quantity']),
                                          image=request.args.get('itemimage'),
-                                         itemsize=changesize.capitalize())
+                                         itemsize=request.args.get('itemsize'))
             quantityToAdd = int(request.form['quantity'])
             # Check to see if cart is empty
             listHasAnyItems = db.session.query(CartItem).first()

@@ -9,14 +9,15 @@
             {{form.hidden_tag()}}
             <h1 class="h3 mb-3 font-weight-normal">Reset Password</h1>
 
-            {{form.userName.label(class="sr-only")}}
-            {{form.userName(size= 24, placeholder="Enter username", class="form-control")}}
-            <br>
+     <div class="">
+      <input class = "w3-input" type="text" name="userName" placeholder="Username">
+    </div>
+    <div class="">
+      <input class = "w3-input" type="password" name="password" placeholder="Password">
+    </div>
+    <br>
 
-            {{form.reset_password.label(class="sr-only")}}
-            {{form.reset_password(size= 24, placeholder="Enter new password", class="form-control")}}
-            <br>
-            {{form.reset(class="btn btn-lg btn-primary")}}
+    <button type="submit" class="btn" style="background-color: darkgray;">Reset</button>
         </form>
     </div>
 </div>
